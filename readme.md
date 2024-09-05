@@ -1,30 +1,34 @@
 # Introduction
-This is another Json library created for a project that couldn' use a more recent version than VS2013. Based on standard library it uses c++ 11.
+This is a IO helper library library created for a project that couldn' use a more recent version than VS2013. Based on standard library it uses c++ 11.
 It uses the standard library but was created to be used as a dll in Windows environment.
-The purpose of this project is to have an intuitive json parser developend in modern c++ that doesn't throw exception and optimizes memory usage.
+The purpose of this project is to have an intuitive object abstraction that allows reflexion to be able to create different serializers. The core library, developed in modern c++ defines inspectable objects that doesn't throw exception and optimizes memory usage.
+A first implementation use json serialization.
 # Installation
 <u><b>Note:</b></u> The library was developped for a windows usage but has no other dependency to windows library than `__declspec` defined in ``JsonIO.h``.
-1. Compile JsonIO project that will produce JsonIO.lib and JsonIO.dll
+1. Compile UIO project that will produce UIO.lib and UIO.dll
 1. In your c++ project, ensure to include all required header files:
-    - IJsonContainer.h
-    - IJsonSerializable.h
-    - IJsonValue.h
-    - JArray.h
-    - JObject.h
-    - JPrimitive.h
+    - IUContainer.h
+    - IUSerializable.h
+    - IUValue.h
+    - UArray.h
+    - UObject.h
+    - UPrimitive.h
     - Json.h
     - JsonIO.h
     - JsonIOHelper.h
-    - JsonItem.h
-    - JsonValue.h
-    - JUndefined.h
-1. In your c++ project, ensure to link to ``JsonIO.lib``
+    - UItem.h
+    - UValue.h
+    - UUndefined.h
+    - JsonSerializer.h
+    - JsonReader.h
+    - JsonWriter.h
+1. In your c++ project, ensure to link to ``UIO.lib``
 1. In your c++ code, just include `Json.h` file that includes all you need. You might want to use namespace json to simplify the code
-1. At runtime, your application will need ``JsonIO.dll``
+1. At runtime, your application will need ``UIO.dll``
 
 # Usage
-The interface `IJsonSerializable` is dedicated to define `readObject` and `writeObject` method which is implemented by the model classes to map each property to a common object: `JObject` which is a dictionary mapping keys to `JsonValue` object.
-A `JsonValue` can be one of `JArray`, `Jobject` or a `JPrimitive` which supports boolean, short, int, float, double, std::string and const char* primitives.
+The interface `IUSerializable` is dedicated to define `readObject` and `writeObject` method which is implemented by the model classes to map each property to a common object: `UObject` which is a dictionary mapping keys to `UValue` object.
+A `UValue` can be one of `UArray`, `UObject` or a `UPrimitive` which supports boolean, short, int, float, double, std::string and const char* primitives.
 ## IJsonSerializable
 ```cpp
 #include "Json.h"
@@ -54,7 +58,7 @@ private:
     int m_id{ 0 };
 };
 
-class Items : public UJsonSerializable
+class Items : public IUSerializable
 {
 public:
     Items()
@@ -143,9 +147,9 @@ int main()
 ```
 
 ## JsonObject
-A `JObject` can be initialized with a json string or filled using operator []; The type of JsonValue is inferred from the primitive type or can be a `JObject` or a `JArray`.
+A `UObject` can be initialized with a json string or filled using operator []; The type of JsonValue is inferred from the primitive type or can be a `UObject` or a `UArray`.
 Note that a copy is used when adding an object or an array. They should be filled to be added to the parent object.
-A `JObject` can be written to or read from a string or a stream.
+A `UObject` can be written to or read from a string or a stream.
 If one tries to access an index that does not exist or find a property that does not exist, a reference to an Undefined value is returned which will always return the default value. This is to avoid controls at runtime.
 getInt on an object or an array will return the size of the object (number of properties) or array (number of items).
 
@@ -234,10 +238,10 @@ int main()
 
 # Architecture
 ![Alt Image Text](./resources/general_architecture.png)
-Your code will use ``JsonValue`` instances or reference to contain any primitive, a ``JObject`` or a ``JArray``.
-You have too keep in mind that a ``JsonValue`` contains a unique pointer to any ``IJsonValue``. Affecting a ``JObject`` or a ``JArray`` to a ``JsonValue`` copy the content to that value even if you pass a reference.
-When you set a ``JsonValue`` to any other type than ``JObject`` or ``JArray`` it will be stored as a ``JPrimitive<T>`` of the object.
-The ``JPrimitive<T>`` describes specializations for the following types:
+Your code will use ``UValue`` instances or reference to contain any primitive, a ``UObject`` or a ``UArray``.
+You have too keep in mind that a ``UValue`` contains a unique pointer to any ``IUValue``. Affecting a ``UObject`` or a ``UArray`` to a ``UValue`` copy the content to that value even if you pass a reference.
+When you set a ``UValue`` to any other type than ``UObject`` or ``UArray`` it will be stored as a ``UPrimitive<T>`` of the object.
+The ``UPrimitive<T>`` describes specializations for the following types:
 - bool
 - short
 - int
