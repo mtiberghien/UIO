@@ -5,7 +5,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #include "Json.h"
 
-using namespace json;
+using namespace uio;
 
 namespace JsonIOtests
 {
