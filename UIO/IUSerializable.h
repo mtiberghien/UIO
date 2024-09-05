@@ -1,10 +1,10 @@
 #pragma once
-#include "JsonIO.h"
+#include "UIO.h"
 #include "UObject.h"
 
-namespace json
+namespace uio
 {
-	class JSONIO_API IUSerializable
+	class UIO_API IUSerializable
 	{
 	public:
 		IUSerializable() {};
@@ -14,7 +14,7 @@ namespace json
 
 	};
 
-	class JSONIO_API UJsonSerializable : public IUSerializable
+	class UIO_API UJsonSerializable : public IUSerializable
 	{
 	public:
 		virtual ~UJsonSerializable() {}

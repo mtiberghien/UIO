@@ -3,7 +3,7 @@
 #include "UValue.h"
 #include "UArray.h"
 
-namespace json
+namespace uio
 {
 	UObject::UObject(std::initializer_list < std::pair<const std::string, UValue>> properties): m_properties(properties)
 	{

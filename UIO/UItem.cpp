@@ -4,7 +4,7 @@
 #include "UUndefined.h"
 #include "UValue.h"
 
-namespace json
+namespace uio
 {
 	std::string toString(E_UType type)
 	{

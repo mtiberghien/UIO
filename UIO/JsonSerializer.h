@@ -1,12 +1,12 @@
 #pragma once
-#include "JsonIO.h"
+#include "UIO.h"
 #include "IUSerializable.h"
 #include "UItem.h"
 
-namespace json
+namespace uio
 {
 
-	class JSONIO_API JsonSerializer
+	class UIO_API JsonSerializer
 	{
 	public:
 		static std::string serialize(const IUSerializable& object, bool indent = false);

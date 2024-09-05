@@ -2,10 +2,10 @@
 #include "IUValue.h"
 #include <map>
 #include <string>
-#include "JsonIO.h"
+#include "UIO.h"
 
 
-namespace json
+namespace uio
 {
 	enum E_IndentMode { Increment, Decrement, None };
 
@@ -37,7 +37,7 @@ namespace json
 
 		static bool readNonStringPrimitive(std::istream& stream, double& result, E_UType& type);
 
-		static JSONIO_API bool tryGetNumber(const std::string& value, double& result, E_UType& type);
+		static UIO_API bool tryGetNumber(const std::string& value, double& result, E_UType& type);
 
 	};
 

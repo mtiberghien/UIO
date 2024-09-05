@@ -2,7 +2,7 @@
 #include "JsonReader.h"
 #include "Json.h"
 
-namespace json
+namespace uio
 {
 	JsonReader::JsonReader()
 	{

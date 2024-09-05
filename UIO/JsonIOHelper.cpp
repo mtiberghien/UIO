@@ -2,7 +2,7 @@
 #include "JsonIOHelper.h"
 #include "UValue.h"
 
-namespace json
+namespace uio
 {
 	const std::map<std::string, char> g_escapes_read = { {"\\r", '\r'} , {"\\n", '\n'}, {"\\t", '\t' }, { "\\f", '\f' }, { "\\v", '\v' } };
 

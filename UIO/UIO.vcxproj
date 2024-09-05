@@ -151,7 +151,7 @@
     <ClInclude Include="UObject.h" />
     <ClInclude Include="UPrimitive.h" />
     <ClInclude Include="Json.h" />
-    <ClInclude Include="JsonIO.h" />
+    <ClInclude Include="UIO.h" />
     <ClInclude Include="UItem.h" />
     <ClInclude Include="UValue.h" />
     <ClInclude Include="JsonWriter.h" />

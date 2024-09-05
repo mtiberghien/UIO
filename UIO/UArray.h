@@ -1,16 +1,16 @@
 #pragma once
 #include "UItem.h"
-#include "JsonIO.h"
+#include "UIO.h"
 #include "IUContainer.h"
 
 
-namespace json
+namespace uio
 {
 	class UValue;
 
-	template class JSONIO_API std::vector<UValue>;
+	template class UIO_API std::vector<UValue>;
 
-	class JSONIO_API UArray : public UItem, public IUContainer
+	class UIO_API UArray : public UItem, public IUContainer
 	{
 	public:
 		UArray();
@@ -59,7 +59,7 @@ namespace json
 	class UArrayProvider
 	{
 	public:
-		static JSONIO_API UArray& getArrayError();
+		static UIO_API UArray& getArrayError();
 	private:
 		static UArrayError m_error;
 	};

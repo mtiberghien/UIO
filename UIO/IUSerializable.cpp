@@ -3,7 +3,7 @@
 #include "UValue.h"
 #include "JsonSerializer.h"
 
-namespace json
+namespace uio
 {
 
 	std::string UJsonSerializable::serialize(bool indent)

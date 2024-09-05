@@ -1,10 +1,10 @@
 #pragma once
 #include "IUValue.h"
-#include "JsonIO.h"
+#include "UIO.h"
 
-namespace json
+namespace uio
 {
-	class JSONIO_API UItem : public IUValue
+	class UIO_API UItem : public IUValue
 	{
 	public:
 		virtual ~UItem() {}

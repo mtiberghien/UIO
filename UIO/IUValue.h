@@ -1,20 +1,20 @@
 #pragma once
 #include "pch.h"
-#include "JsonIO.h"
+#include "UIO.h"
 #include <string>
 
-namespace json
+namespace uio
 {
 	enum class E_UType { Object, Array, Bool, Short, Int, Float, Double, String, Null, Undefined, Error };
 	enum class E_ValueMetaType { Object, Array, StringPrimitive, NonStringPrimitive, Error};
 
-	JSONIO_API extern std::string toString(E_UType type);
+	UIO_API extern std::string toString(E_UType type);
 
 	class UValue;
 	class UObject;
 	class UArray;
 
-	class JSONIO_API IUValue
+	class UIO_API IUValue
 	{
 	public:
 		IUValue() {}

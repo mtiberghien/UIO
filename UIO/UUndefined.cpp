@@ -3,7 +3,7 @@
 #include "UValue.h"
 #include "UObject.h"
 
-namespace json
+namespace uio
 {
 	UValue& UUndefined::operator[](const std::string& key)
 	{

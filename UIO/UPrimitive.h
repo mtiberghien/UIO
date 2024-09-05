@@ -2,14 +2,14 @@
 #include "UItem.h"
 #include "UUndefined.h"
 #include "JsonIOHelper.h"
-#include "JsonIO.h"
+#include "UIO.h"
 #include "UObject.h"
 #include "UArray.h"
 #include <limits>
 #include <iomanip>
 #include <sstream>
 
-namespace json
+namespace uio
 {
 	class UUndefined;
 	class UValue;

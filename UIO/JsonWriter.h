@@ -1,7 +1,7 @@
 #pragma once
 #include "UItem.h"
 
-namespace json
+namespace uio
 {
 	class JsonWriter
 	{

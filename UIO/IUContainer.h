@@ -1,9 +1,9 @@
 #pragma once
-#include "JsonIO.h"
+#include "UIO.h"
 
-namespace json
+namespace uio
 {
-	class JSONIO_API IUContainer
+	class UIO_API IUContainer
 	{
 	public:
 		virtual ~IUContainer() {}

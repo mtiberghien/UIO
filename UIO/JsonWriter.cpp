@@ -2,7 +2,7 @@
 #include "JsonWriter.h"
 #include "Json.h"
 
-namespace json
+namespace uio
 {
 	JsonWriter::JsonWriter()
 	{

@@ -5,7 +5,7 @@
 #include "UObject.h"
 
 
-namespace json
+namespace uio
 {
 	UArray::UArray() {};
 	UValue& UArray::operator[](const std::string& key) {
