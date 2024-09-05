@@ -33,7 +33,7 @@ A `UValue` can be one of `UArray`, `UObject` or a `UPrimitive` which supports bo
 ```cpp
 #include "Json.h"
 
-using namespace json;
+using namespace uio;
 
 
 class Item : public IUSerializable
@@ -162,7 +162,7 @@ An array item can be accessed with a string if it can be parsed as a valid index
 #include "Json.h"
 #include <iostream>
 
-using namespace json;
+using namespace uio;
 
 
 int main()
