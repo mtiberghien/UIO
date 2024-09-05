@@ -5,7 +5,7 @@
 #include "UArray.h"
 #include "JsonIOHelper.h"
 
-namespace json
+namespace uio
 {
 	UValue::UValue(const UObject& ref) : m_ptr(new UObject(ref))
 	{

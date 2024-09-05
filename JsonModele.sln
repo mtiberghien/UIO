@@ -1,12 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JsonModele", "JsonModele\JsonModele.vcxproj", "{03BDAEEB-B716-4A72-B040-77B10488B3FD}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JsonIO", "JsonIO\JsonIO.vcxproj", "{DB0E78E8-E450-478E-BCC1-4F8969F6EED5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{297063ED-5712-4802-90D2-A9918932DF5E}"
 	ProjectSection(SolutionItems) = preProject
 		resources\general_architecture.png = resources\general_architecture.png
@@ -15,7 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		resources\serialization_architecture.png = resources\serialization_architecture.png
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JsonIO.tests", "JsonIO.tests\JsonIO.tests.vcxproj", "{20337EAA-10B5-44C6-AA8B-2771C6F959EB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIO", "UIO\UIO.vcxproj", "{DB0E78E8-E450-478E-BCC1-4F8969F6EED5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIO.console", "UIO.console\UIO.console.vcxproj", "{03BDAEEB-B716-4A72-B040-77B10488B3FD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIO.tests", "UIO.tests\UIO.tests.vcxproj", "{20337EAA-10B5-44C6-AA8B-2771C6F959EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Debug|x64.ActiveCfg = Debug|x64
-		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Debug|x64.Build.0 = Debug|x64
-		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Debug|x86.ActiveCfg = Debug|Win32
-		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Debug|x86.Build.0 = Debug|Win32
-		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Release|x64.ActiveCfg = Release|x64
-		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Release|x64.Build.0 = Release|x64
-		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Release|x86.ActiveCfg = Release|Win32
-		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Release|x86.Build.0 = Release|Win32
 		{DB0E78E8-E450-478E-BCC1-4F8969F6EED5}.Debug|x64.ActiveCfg = Debug|x64
 		{DB0E78E8-E450-478E-BCC1-4F8969F6EED5}.Debug|x64.Build.0 = Debug|x64
 		{DB0E78E8-E450-478E-BCC1-4F8969F6EED5}.Debug|x86.ActiveCfg = Debug|Win32
@@ -41,6 +33,14 @@ Global
 		{DB0E78E8-E450-478E-BCC1-4F8969F6EED5}.Release|x64.Build.0 = Release|x64
 		{DB0E78E8-E450-478E-BCC1-4F8969F6EED5}.Release|x86.ActiveCfg = Release|Win32
 		{DB0E78E8-E450-478E-BCC1-4F8969F6EED5}.Release|x86.Build.0 = Release|Win32
+		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Debug|x64.ActiveCfg = Debug|x64
+		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Debug|x64.Build.0 = Debug|x64
+		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Debug|x86.ActiveCfg = Debug|Win32
+		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Debug|x86.Build.0 = Debug|Win32
+		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Release|x64.ActiveCfg = Release|x64
+		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Release|x64.Build.0 = Release|x64
+		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Release|x86.ActiveCfg = Release|Win32
+		{03BDAEEB-B716-4A72-B040-77B10488B3FD}.Release|x86.Build.0 = Release|Win32
 		{20337EAA-10B5-44C6-AA8B-2771C6F959EB}.Debug|x64.ActiveCfg = Debug|x64
 		{20337EAA-10B5-44C6-AA8B-2771C6F959EB}.Debug|x64.Build.0 = Debug|x64
 		{20337EAA-10B5-44C6-AA8B-2771C6F959EB}.Debug|x86.ActiveCfg = Debug|Win32

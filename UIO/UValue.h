@@ -1,17 +1,17 @@
 #pragma once
 #include "UItem.h"
 #include "UPrimitive.h"
-#include "JsonIO.h"
+#include "UIO.h"
 
-namespace json
+namespace uio
 {
 	class UObject;
 	class JUndefined;
 	class UArray;
 
-	template class JSONIO_API std::unique_ptr<IUValue>;
+	template class UIO_API std::unique_ptr<IUValue>;
 
-	class JSONIO_API UValue : public UItem
+	class UIO_API UValue : public UItem
 	{
 	public:
 		UValue();

@@ -1,9 +1,9 @@
 #pragma once
 #include "UItem.h"
-#include "JsonIO.h"
+#include "UIO.h"
 
 
-namespace json
+namespace uio
 {
 	class UUndefined : public IUValue
 	{
@@ -37,7 +37,7 @@ namespace json
 	class JVoidProvider
 	{
 	public:
-		static JSONIO_API UValue& getError();
+		static UIO_API UValue& getError();
 	private:
 		static UValue m_void;
 	};
