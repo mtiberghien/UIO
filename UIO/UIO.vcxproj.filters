@@ -13,6 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Serializers">
+      <UniqueIdentifier>{f184fb3e-3074-4121-80be-de26166e91cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Serializers\Json">
+      <UniqueIdentifier>{4dfebbe2-85d7-46f1-b8c5-369d3260f232}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Serializers">
+      <UniqueIdentifier>{e7c369da-fc75-4edf-8081-6bf8ba9a467b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Serializers\Json">
+      <UniqueIdentifier>{4fee717b-85ae-4126-9639-a1d43402d5a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{485740ae-f9c1-4d52-a7a5-c8fa1c771a80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{a48314c8-1f09-45d5-942b-4b9fe1a6500b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Serializers\Xml">
+      <UniqueIdentifier>{3bda9d62-4a56-4d06-b59d-91622322f64d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Serializers\Xml">
+      <UniqueIdentifier>{7d5ac674-eba2-4ab6-bf6f-735f86f798c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -21,91 +45,91 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JsonIOHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Json.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="JsonSerializer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="JsonWriter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UPrimitive.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IUValue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UValue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UUndefined.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="JsonReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IUSerializable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IUContainer.h">
+    <ClInclude Include="UIO_All.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UIO.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonSerializer.h">
+      <Filter>Header Files\Serializers\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonReader.h">
+      <Filter>Header Files\Serializers\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonWriter.h">
+      <Filter>Header Files\Serializers\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="IUSerializable.h">
+      <Filter>Header Files\Serializers</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonIOHelper.h">
+      <Filter>Header Files\Serializers\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="IUContainer.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="IUValue.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="UArray.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="UItem.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="UObject.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="UPrimitive.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="UUndefined.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="UValue.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JsonReader.cpp">
+      <Filter>Source Files\Serializers\Json</Filter>
+    </ClCompile>
     <ClCompile Include="JsonIOHelper.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Serializers\Json</Filter>
     </ClCompile>
     <ClCompile Include="JsonSerializer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="JsonWriter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UArray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UPrimitive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UValue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UUndefined.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="JsonReader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Serializers\Json</Filter>
     </ClCompile>
     <ClCompile Include="IUSerializable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Serializers</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonWriter.cpp">
+      <Filter>Source Files\Serializers\Json</Filter>
     </ClCompile>
     <ClCompile Include="IUContainer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UArray.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UItem.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UValue.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UObject.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UPrimitive.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UUndefined.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

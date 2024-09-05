@@ -13,7 +13,7 @@ A first implementation use json serialization.
     - UArray.h
     - UObject.h
     - UPrimitive.h
-    - Json.h
+    - UIO_All.h
     - UIO.h
     - JsonIOHelper.h
     - UItem.h
@@ -23,7 +23,7 @@ A first implementation use json serialization.
     - JsonReader.h
     - JsonWriter.h
 1. In your c++ project, ensure to link to ``UIO.lib``
-1. In your c++ code, just include `Json.h` file that includes all you need. You might want to use namespace json to simplify the code
+1. In your c++ code, just include `UIO_All.h` file that includes all you need. You might want to use namespace json to simplify the code
 1. At runtime, your application will need ``UIO.dll``
 
 # Usage
@@ -31,7 +31,7 @@ The interface `IUSerializable` is dedicated to define `readObject` and `writeObj
 A `UValue` can be one of `UArray`, `UObject` or a `UPrimitive` which supports boolean, short, int, float, double, std::string and const char* primitives.
 ## IJsonSerializable
 ```cpp
-#include "Json.h"
+#include "UIO_All.h"
 
 using namespace uio;
 
@@ -159,7 +159,7 @@ An object property can be accessed using an index but user should be aware that 
 An array item can be accessed with a string if it can be parsed as a valid index of the array.
 
 ```cpp
-#include "Json.h"
+#include "UIO_All.h"
 #include <iostream>
 
 using namespace uio;

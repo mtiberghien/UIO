@@ -150,7 +150,7 @@
     <ClInclude Include="UArray.h" />
     <ClInclude Include="UObject.h" />
     <ClInclude Include="UPrimitive.h" />
-    <ClInclude Include="Json.h" />
+    <ClInclude Include="UIO_All.h" />
     <ClInclude Include="UIO.h" />
     <ClInclude Include="UItem.h" />
     <ClInclude Include="UValue.h" />

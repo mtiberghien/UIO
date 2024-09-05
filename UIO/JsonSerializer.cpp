@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "JsonSerializer.h"
-#include "Json.h"
+#include "UIO_All.h"
 #include "JsonWriter.h"
 #include "JsonReader.h"
 
@@ -84,6 +84,29 @@ namespace uio
 	bool JsonSerializer::deserialize(std::istream& stream, UItem& object)
 	{
 		return JsonReader::readItem(stream, object);
+	}
+
+	std::string UJsonSerializable::serialize(bool indent)
+	{
+		std::ostringstream s;
+		serialize(s, indent);
+		return s.str();
+	}
+
+	bool UJsonSerializable::serialize(std::ostream& stream, bool indent)
+	{
+		return JsonSerializer::serialize(stream, *this, indent);
+	}
+
+	bool UJsonSerializable::deserialize(std::istream& stream)
+	{
+		return JsonSerializer::deserialize(stream, *this);
+	}
+
+	bool UJsonSerializable::deserialize(std::string& json)
+	{
+		std::istringstream s{ json };
+		return deserialize(s);
 	}
 }
 
