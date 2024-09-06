@@ -25,16 +25,17 @@ namespace uio
 		const UValue& operator[](const std::string& key) const override;
 		UValue& operator[](int index) override;
 		const UValue& operator[](int index) const override;
+		UValue& getIfExists(const std::string& key) override;
 	};
 
-	class JUndefinedError : public UUndefined
+	class UUndefinedError : public UUndefined
 	{
 	public :
-		JUndefinedError() {}
+		UUndefinedError() {}
 		E_UType getType() const override { return E_UType::Error; }
 	};
 
-	class JVoidProvider
+	class UUndefinedProvider
 	{
 	public:
 		static UIO_API UValue& getError();

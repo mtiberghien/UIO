@@ -34,6 +34,7 @@ namespace uio
 		virtual const UArray& getArray() const = 0;
 		virtual const UValue& operator[](const std::string& key) const = 0;
 		virtual const UValue& operator[](int index) const = 0;
+		virtual UValue& getIfExists(const std::string& key) = 0;
 	};
 }
 

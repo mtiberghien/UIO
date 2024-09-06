@@ -15,7 +15,11 @@ namespace uio
 		{
 			return m_items[(int)d];
 		}
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
+	}
+
+	UValue& UArray::getIfExists(const std::string& key) {
+		return this->operator[](key);
 	}
 
 	const UValue& UArray::operator[](const std::string& key) const {
@@ -25,7 +29,7 @@ namespace uio
 		{
 			return m_items.at((int)d);
 		}
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	UValue& UArray::operator[](int index)
@@ -34,7 +38,7 @@ namespace uio
 		{
 			return m_items[index];
 		}
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	const UValue& UArray::operator[](int index) const
@@ -43,7 +47,7 @@ namespace uio
 		{
 			return m_items.at(index);
 		}
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	UArray& UArray::operator=(const UArray& array)

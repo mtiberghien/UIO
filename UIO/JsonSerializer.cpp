@@ -8,47 +8,47 @@ namespace uio
 {
 	
 
-	std::string JsonSerializer::serialize(const IUSerializable& object, bool indent)
+	std::string JsonSerializer::serialize(const IUSerializable& object, const JsonSettings& settings)
 	{
 
 		std::ostringstream s;
-		if (serialize(s, object, indent))
+		if (serialize(s, object, settings))
 		{
 			return s.str();
 		}
 		return "";
 	}
 
-	bool JsonSerializer::serialize(std::ostream& stream, const IUSerializable& object, bool indent)
+	bool JsonSerializer::serialize(std::ostream& stream, const IUSerializable& object, const JsonSettings& settings)
 	{
 		if (stream.good())
 		{
 			UObject o;
 			object.toObject(o);
 			int indentLevel = 0;
-			JsonWriter::writeItem(stream, o, indent);
+			JsonWriter::writeItem(stream, o, settings);
 			return true;
 		}
 		return false;
 	}
 
-	std::string JsonSerializer::serialize(const UItem& object, bool indent)
+	std::string JsonSerializer::serialize(const UItem& object, const JsonSettings& settings)
 	{
 
 		std::ostringstream s;
-		if (serialize(s, object, indent))
+		if (serialize(s, object, settings))
 		{
 			return s.str();
 		}
 		return "";
 	}
 
-	bool JsonSerializer::serialize(std::ostream& stream, const UItem& item, bool indent)
+	bool JsonSerializer::serialize(std::ostream& stream, const UItem& item, const JsonSettings& settings)
 	{
 		if (stream.good())
 		{
 			int indentLevel = 0;
-			JsonWriter::writeItem(stream, item, indent);
+			JsonWriter::writeItem(stream, item, settings);
 			return true;
 		}
 		return false;
@@ -86,16 +86,16 @@ namespace uio
 		return JsonReader::readItem(stream, object);
 	}
 
-	std::string UJsonSerializable::serialize(bool indent)
+	std::string UJsonSerializable::serialize(const JsonSettings& settings)
 	{
 		std::ostringstream s;
-		serialize(s, indent);
+		serialize(s, settings);
 		return s.str();
 	}
 
-	bool UJsonSerializable::serialize(std::ostream& stream, bool indent)
+	bool UJsonSerializable::serialize(std::ostream& stream, const JsonSettings& settings)
 	{
-		return JsonSerializer::serialize(stream, *this, indent);
+		return JsonSerializer::serialize(stream, *this, settings);
 	}
 
 	bool UJsonSerializable::deserialize(std::istream& stream)

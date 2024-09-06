@@ -7,22 +7,27 @@ namespace uio
 {
 	UValue& UUndefined::operator[](const std::string& key)
 	{
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	const UValue& UUndefined::operator[](const std::string& key) const
 	{
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	UValue& UUndefined::operator[](int index)
 	{
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
+	}
+
+	UValue& UUndefined::getIfExists(const std::string& key)
+	{
+		return UUndefinedProvider::getError();
 	}
 
 	const UValue& UUndefined::operator[](int index) const
 	{
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	UObject& UUndefined::getObject()
@@ -45,9 +50,9 @@ namespace uio
 		return UArrayProvider::getArrayError();
 	}
 
-	UValue JVoidProvider::m_void{ E_UType::Error };
+	UValue UUndefinedProvider::m_void{ E_UType::Error };
 
-	UValue& JVoidProvider::getError()
+	UValue& UUndefinedProvider::getError()
 	{
 		return m_void;
 	}

@@ -18,16 +18,19 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JObject.tests.cpp">
+    <ClCompile Include="UObject.tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JsonValue.tests.cpp">
+    <ClCompile Include="UValue.tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IJsonSerializable.tests.cpp">
+    <ClCompile Include="IUSerializable.tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JArray.tests.cpp">
+    <ClCompile Include="UArray.tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UItem.tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,4 +5,5 @@
 #include "IUSerializable.h"
 #include "UArray.h"
 #include "JsonSerializer.h"
+#include "XmlSerializer.h"
 

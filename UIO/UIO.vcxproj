@@ -157,6 +157,9 @@
     <ClInclude Include="JsonWriter.h" />
     <ClInclude Include="UUndefined.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="XmlReader.h" />
+    <ClInclude Include="XmlSerializer.h" />
+    <ClInclude Include="XmlWriter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="JsonReader.cpp" />
@@ -177,6 +180,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="XmlReader.cpp" />
+    <ClCompile Include="XmlSerializer.cpp" />
+    <ClCompile Include="XmlWriter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

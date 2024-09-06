@@ -7,9 +7,9 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using namespace uio;
 
-namespace JsonIOtests
+namespace UIOTests
 {
-	TEST_CLASS(JsonArraytests)
+	TEST_CLASS(UArraytests)
 	{
 		TEST_METHOD(JArrayStringInit)
 		{

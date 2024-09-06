@@ -43,6 +43,7 @@ namespace uio
 		std::vector<UValue>::const_iterator begin() const { return m_items.begin(); }
 		std::vector<UValue>::const_iterator end() const { return m_items.end(); }
 		bool operator==(const IUValue& other) const;
+		UValue& getIfExists(const std::string& key) override;
 	private:
 		std::vector<UValue> m_items;
 	};

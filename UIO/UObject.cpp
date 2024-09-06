@@ -31,9 +31,18 @@ namespace uio
 	{
 		if (!exists(key))
 		{
-			return JVoidProvider::getError();
+			return UUndefinedProvider::getError();
 		}
 		return m_properties.at(key);
+	}
+
+	UValue& UObject::getIfExists(const std::string& key)
+	{
+		if (!exists(key))
+		{
+			return UUndefinedProvider::getError();
+		}
+		return m_properties[key];
 	}
 
 	UValue& UObject::operator[](int index)
@@ -44,7 +53,7 @@ namespace uio
 			std::advance(it, index);
 			return it->second;
 		}
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	const UValue& UObject::operator[](int index) const
@@ -55,7 +64,7 @@ namespace uio
 			std::advance(it, index);
 			return m_properties.at(it->first);
 		}
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	std::vector<std::string> UObject::getKeys() const
@@ -118,12 +127,12 @@ namespace uio
 
 	UValue& UObjectError::operator[](const std::string& key) 
 	{
-		return JVoidProvider::getError();
+		return UUndefinedProvider::getError();
 	}
 
 	UValue& UObjectError::operator[](int index)
 	{
-		return JVoidProvider::getError();		
+		return UUndefinedProvider::getError();		
 	}
 
 	UObjectError UObjectProvider::m_error;

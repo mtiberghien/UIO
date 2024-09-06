@@ -90,6 +90,15 @@
     <ClInclude Include="UValue.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="XmlReader.h">
+      <Filter>Header Files\Serializers\Xml</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlWriter.h">
+      <Filter>Header Files\Serializers\Xml</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlSerializer.h">
+      <Filter>Header Files\Serializers\Xml</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -130,6 +139,15 @@
     </ClCompile>
     <ClCompile Include="UUndefined.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlReader.cpp">
+      <Filter>Source Files\Serializers\Xml</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlWriter.cpp">
+      <Filter>Source Files\Serializers\Xml</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlSerializer.cpp">
+      <Filter>Source Files\Serializers\Xml</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

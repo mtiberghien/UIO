@@ -37,6 +37,7 @@ namespace uio
 		const UValue& operator[](int index) const override { return m_ptr->operator[](index); }
 		UValue& operator[](const std::string& key) override { return m_ptr->operator[](key); }
 		UValue& operator[](int index) override { return m_ptr->operator[](index); }
+		UValue& getIfExists(const std::string& key) override { return m_ptr->getIfExists(key); }
 		UValue& operator=(const UValue& value)
 		{
 			if (getType() != E_UType::Error)

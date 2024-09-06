@@ -7,7 +7,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using namespace uio;
 
-namespace JsonIOtests
+namespace UIOTests
 {
 	class Item: public UJsonSerializable
 	{
@@ -121,15 +121,15 @@ namespace JsonIOtests
 		Items m_items;
 	};
 
-	TEST_CLASS(IJsonSerializabletests)
+	TEST_CLASS(IUSerializabletests)
 	{
 		TEST_METHOD(ItemSerialization)
 		{
 			Item i{ 1, "test_1" };
 			Item i2{ 2, "test_2" };
-			std::string json = i.serialize();
+			std::string json = i.serialize(false);
 			Assert::AreEqual(std::string{ R"({"id": 1, "name": "test_1"})" }, json);
-			json = i2.serialize();
+			json = i2.serialize(false);
 			Assert::AreEqual(std::string{ R"({"id": 2, "name": "test_2"})" }, json);
 		}
 
@@ -150,7 +150,7 @@ namespace JsonIOtests
 			Items items;
 			items.push_back({ 1,"item_1" });
 			items.push_back({ 2, "item_2" });
-			std::string json = items.serialize();
+			std::string json = items.serialize(false);
 			Assert::AreEqual(std::string{ R"({"devices": [{"id": 1, "name": "item_1"}, {"id": 2, "name": "item_2"}]})" }, json);
 		}
 

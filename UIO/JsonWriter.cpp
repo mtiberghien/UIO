@@ -112,10 +112,10 @@ namespace uio
 		}
 	}
 
-	void JsonWriter::writeItem(std::ostream& stream, const UItem& value, bool indent)
+	void JsonWriter::writeItem(std::ostream& stream, const UItem& value, const JsonSettings& settings)
 	{
 		int indentLevel = 0;
-		writeValue(stream, value, indent, indentLevel);
+		writeValue(stream, value, settings.getIndent(), indentLevel);
 	}
 }
 

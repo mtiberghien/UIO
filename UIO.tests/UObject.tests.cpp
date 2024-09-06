@@ -7,9 +7,9 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using namespace uio;
 
-namespace JsonIOtests
+namespace UIOTests
 {
-	TEST_CLASS(JObjecttests)
+	TEST_CLASS(UObjecttests)
 	{
 	public:
 		
@@ -224,7 +224,7 @@ namespace JsonIOtests
 			Assert::IsTrue(JsonSerializer::deserialize(json2, o2));
 			std::ostringstream s;
 			std::ostringstream s2;
-			JsonSerializer::serialize(s, o);
+			JsonSerializer::serialize(s, o, false);
 			JsonSerializer::serialize(s2, o2, true);
 			Assert::AreEqual(json, s.str());
 			Assert::AreEqual(json2, s2.str());

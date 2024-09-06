@@ -7,9 +7,9 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using namespace uio;
 
-namespace JsonIOtests
+namespace UIOTests
 {
-	TEST_CLASS(JsonValuetests)
+	TEST_CLASS(UValuetests)
 	{
 		TEST_METHOD(UndefinedValue)
 		{

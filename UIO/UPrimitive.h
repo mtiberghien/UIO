@@ -61,28 +61,29 @@ namespace uio
 
 		UValue& operator[](const std::string& key) override
 		{
-			return JVoidProvider::getError();
+			return UUndefinedProvider::getError();
 		}
 
 		const UValue& operator[](const std::string& key) const override
 		{
-			return JVoidProvider::getError();
+			return UUndefinedProvider::getError();
 		}
 
 		UValue& operator[](int index) override
 		{
-			return JVoidProvider::getError();
+			return UUndefinedProvider::getError();
 		}
 
 		const UValue& operator[](int index) const override
 		{
-			return JVoidProvider::getError();
+			return UUndefinedProvider::getError();
 		}
 
 		UObject& getObject() override { return UObjectProvider::getObjectError(); }
 		UArray& getArray() override { return UArrayProvider::getArrayError(); }
 		const UObject& getObject() const override { return UObjectProvider::getObjectError(); }
 		const UArray& getArray() const override { return UArrayProvider::getArrayError(); }
+		UValue& getIfExists(const std::string& key) override { return UUndefinedProvider::getError(); }
 
 	private:
 		template<class T>

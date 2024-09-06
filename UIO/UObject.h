@@ -40,6 +40,7 @@ namespace uio
 		std::map<std::string, UValue>::const_iterator begin() const { return m_properties.begin(); }
 		std::map<std::string, UValue>::const_iterator end() const { return m_properties.end(); }
 		bool operator==(const IUValue& other) const override;
+		UValue& getIfExists(const std::string& key) override;
 	private:
 		std::map<std::string, UValue> m_properties;
 	};

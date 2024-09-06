@@ -69,7 +69,7 @@ namespace uio
 			break;
 		}
 		default:
-			m_ptr = std::make_unique<JUndefinedError>();
+			m_ptr = std::make_unique<UUndefinedError>();
 			break;
 		}
 	}
@@ -127,7 +127,7 @@ namespace uio
 			break;
 		}
 		default:
-			m_ptr = std::make_unique<JUndefinedError>();
+			m_ptr = std::make_unique<UUndefinedError>();
 			break;
 		}
 	}

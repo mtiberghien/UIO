@@ -129,7 +129,7 @@ void TestJObject()
     JsonSerializer::serialize(std::cout, o, true);
     std::cout << "ids[0]: " << o["ids"][0].getString() << std::endl;
 	std::cout << "o[0][\"0\"]: ";
-	JsonSerializer::serialize(std::cout, o[0]["0"]);
+	JsonSerializer::serialize(std::cout, o[0]["0"], false);
 	std::cout << std::endl;
     std::cout << "isOk: " << (std::string)o["isOk"] << std::endl;
     std::cout << "values: " << o["values"].getString() << std::endl;
@@ -328,6 +328,6 @@ int main()
     vFind = oTest.find("notFound");
     TestValue(vFind);
     TestValue(oTest["id"]);
-
+    XmlSerializer::serialize(std::cout, oTest);
     std::getchar();
 }
