@@ -49,7 +49,7 @@ namespace uio
 			std::equal(a.begin(), a.end(), b.begin(), ichar_equals);
 	}
 
-	void JsonIOHelper::handleIndent(std::ostream& stream, bool indent, int& indentLevel, E_IndentMode mode)
+	void JsonIOHelper::handleIndent(std::ostream& stream, bool endl, int& indentLevel, E_IndentMode mode)
 	{
 		switch (mode)
 		{
@@ -57,15 +57,15 @@ namespace uio
 		case E_IndentMode::Decrement: indentLevel--; break;
 		default:break;
 		}
-		if (indent)
+		if (endl)
 		{
 			stream << std::endl;
 		}
 	}
 
-	std::ostream& JsonIOHelper::doIndent(std::ostream& stream, bool indent, int& indentLevel)
+	std::ostream& JsonIOHelper::doIndent(std::ostream& stream, bool indent, int indentLevel, int indentValue)
 	{
-		stream << std::string(indent * indentLevel * 4, ' ');
+		stream << std::string(indent * indentLevel * indentValue, ' ');
 		return stream;
 	}
 

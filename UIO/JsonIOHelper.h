@@ -17,9 +17,9 @@ namespace uio
 
 		static bool iequals(const std::string& a, const std::string& b);
 
-		static void handleIndent(std::ostream& stream, bool indent, int& indentLevel, E_IndentMode mode = E_IndentMode::None);
+		static void handleIndent(std::ostream& stream, bool endl, int& indentLevel, E_IndentMode mode = E_IndentMode::None);
 
-		static std::ostream& doIndent(std::ostream& stream, bool indent, int& indentLevel);
+		static std::ostream& doIndent(std::ostream& stream, bool indent, int indentLevel, int indentValue = 4);
 
 		static bool findFirstNonSpaceCharacter(std::istream& stream);
 

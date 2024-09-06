@@ -4,7 +4,7 @@
 
 namespace uio
 {
-	void writeValue(std::ostream& stream, const UItem& value, const std::string& key = "");
+	void writeValue(std::ostream& stream, const UItem& value, bool indent, int& indentLevel, const std::string& key = "");
 
 	std::string getSafeXmlValue(const std::string& value)
 	{
@@ -25,9 +25,9 @@ namespace uio
 		}
 	}
 
-	void writeObject(std::ostream& stream, const UObject& object, const std::string& key)
+	void writeObject(std::ostream& stream, const UObject& object, bool indent, int& indentLevel, const std::string& key)
 	{
-		stream << "<Object";
+		JsonIOHelper::doIndent(stream, indent, indentLevel) << "<Object";
 		int childrenCount = 0;
 		writeKey(stream, key);
 		if (!object.isEmpty())
@@ -46,62 +46,71 @@ namespace uio
 		}
 		if (childrenCount>0)
 		{
-			stream << "/>" << std::endl;
+			stream << "/>";
+			JsonIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::Increment);
 			for (auto it = object.begin(); it != object.end(); it++)
 			{
 				if (!it->second.isPrimitive())
 				{
-					writeValue(stream, it->second, it->first);
+					writeValue(stream, it->second, indent, indentLevel, it->first);
 				}
 			}
-			stream << "</Object>" << std::endl;
+			JsonIOHelper::handleIndent(stream, true, indentLevel, E_IndentMode::Decrement);
+			JsonIOHelper::doIndent(stream, indent, indentLevel) << "</Object>";
 		}
 		else
 		{
-			stream << "/>" << std::endl;
+			stream << "/>";
+			JsonIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 		}
 	}
 
-	void writeArray(std::ostream& stream, const UArray& array, const std::string& key = "")
+	void writeArray(std::ostream& stream, const UArray& array, bool indent, int& indentLevel, const std::string& key = "")
 	{
-		stream << "<Array";
+		JsonIOHelper::doIndent(stream, indent, indentLevel) << "<Array";
 		writeKey(stream, key);
 		if (!array.isEmpty())
 		{
-			stream << ">" << std::endl;
+			stream << ">";
+			JsonIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::Increment);
 			for (auto it = array.begin(); it != array.end(); it++)
 			{
-				writeValue(stream, *it);
+				writeValue(stream, *it, indent, indentLevel);
 			}
-			stream << "</Array>" << std::endl;
+			JsonIOHelper::handleIndent(stream, false, indentLevel, E_IndentMode::Decrement);
+			JsonIOHelper::doIndent(stream, indent, indentLevel) << "</Array>";
 		}
 		else
 		{
-			stream << "/>" << std::endl;
+			stream << "/>";
+			JsonIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 		}
 		
 	}
 
-	void writePrimitive(std::ostream& stream, const UItem& value, const std::string& key="")
+	void writePrimitive(std::ostream& stream, const UItem& value, bool indent, int& indentLevel, const std::string& key="")
 	{
+		JsonIOHelper::doIndent(stream, indent, indentLevel);
 		stream << "<" << toString(value.getType());
 		writeKey(stream, key);
 		stream << ">";
-		stream << value.getString() << "</" << toString(value.getType()) << ">" << std::endl;
+		stream << value.getString() << "</" << toString(value.getType()) << ">";
+		JsonIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 	}
 
-	void writeValue(std::ostream& stream, const UItem& value, const std::string& key)
+	void writeValue(std::ostream& stream, const UItem& value, bool indent, int& indentLevel, const std::string& key)
 	{
 		switch (value.getType())
 		{
-		case E_UType::Array: writeArray(stream, value.getArray(), key); break;
-		case E_UType::Object: writeObject(stream, value.getObject(), key); break;
-		default: writePrimitive(stream, value, key); break;
+		case E_UType::Array: writeArray(stream, value.getArray(), indent, indentLevel, key); break;
+		case E_UType::Object: writeObject(stream, value.getObject(), indent, indentLevel, key); break;
+		default: writePrimitive(stream, value, indent, indentLevel, key); break;
 		}
 	}
 
-	void XmlWriter::writeItem(std::ostream& stream, const UItem& value)
+	void XmlWriter::writeItem(std::ostream& stream, const UItem& value, const XmlSettings& settings)
 	{
-		writeValue(stream, value);
+		int indentLevel = 0;
+		writeValue(stream, value, settings.getIndent(), indentLevel);
 	}
 }
