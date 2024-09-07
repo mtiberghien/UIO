@@ -14,8 +14,6 @@ namespace uio
 	class UUndefined;
 	class UValue;
 
-	const std::map<char, std::string> g_escapes = { {'\r', "\\r"}, {'\n', "\\n"},{'\t', "\\t"},{'\f',"\\f"},{'\v', "\\v"} };
-
 
 	template<class T>
 	class UPrimitive : public IUValue

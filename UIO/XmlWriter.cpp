@@ -7,10 +7,23 @@ namespace uio
 {
 	static void writeValue(std::ostream& stream, const UItem& value, const XmlSettings& settings, int& indentLevel, const std::string& key = "");
 
+	const std::map<char, std::string> g_escapes = { {'\r', "&#xD;"}, {'\n', "&xA;"}, {' ', "\&#x20;"},{'<', "&lt;"},{'>',"&gt;"},{'&', "&amp;"},{'\'', "&apos;"}, {'\"', "&quot;"}};
+
 	static std::string getSafeXmlValue(const std::string& value)
 	{
-		//Todo handle special characters
-		return value;
+		std::ostringstream s;
+		for (char c : value)
+		{
+			if (g_escapes.find(c) != g_escapes.end())
+			{
+				s << g_escapes.at(c);
+			}
+			else
+			{
+				s << c;
+			}
+		}
+		return s.str();
 	}
 
 	static std::ostream& writePrefix(std::ostream& stream, const std::string& prefix)
@@ -26,7 +39,7 @@ namespace uio
 	static void writeAttribute(std::ostream& stream, const std::string& key, const UValue& value, const std::string& prefix="")
 	{
 		stream << " ";
-		writePrefix(stream, prefix) << key << "=\"" << getSafeXmlValue(value.getString()) << "\"";
+		writePrefix(stream, prefix) << getSafeXmlValue(key) << "=\"" << getSafeXmlValue(value.getString()) << "\"";
 	}
 
 	static void beginObject(std::ostream& stream, const std::string& name, const std::string& prefix="")
@@ -41,11 +54,11 @@ namespace uio
 		writePrefix(stream, prefix) << name << ">";
 	}
 
-	static void writeKey(std::ostream& stream, const std::string& key)
+	static void writeNonEmptyAttribute(std::ostream& stream, const std::string& key, const std::string& value)
 	{
-		if (!key.empty())
+		if (!value.empty())
 		{
-			writeAttribute(stream, "key", key, "uio");
+			writeAttribute(stream, key, value, "uio");
 		}
 	}
 
@@ -78,7 +91,8 @@ namespace uio
 		{
 			declareNameSpace(stream, "uio", "urn:uio:schema");
 		}
-		writeKey(stream, key);
+		writeNonEmptyAttribute(stream, "key", key);
+		writeNonEmptyAttribute(stream, "name", object.getName());
 		if (!object.isEmpty())
 		{
 			for (auto it = object.begin(); it != object.end(); it++)
@@ -123,7 +137,7 @@ namespace uio
 		UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
 		std::string elementName = getElementNameOrType(key, E_UType::Array);
 		beginObject(stream, elementName);
-		writeKey(stream, key);
+		writeNonEmptyAttribute(stream, "key", key);
 		if (!array.isEmpty())
 		{
 			stream << ">";
@@ -151,7 +165,7 @@ namespace uio
 		UIOHelper::doIndent(stream, indent, indentLevel, settings.getIndentValue());
 		std::string elementName = getElementNameOrType(key, value.getType());
 		beginObject(stream, elementName);
-		writeKey(stream, key);
+		writeNonEmptyAttribute(stream, "key", key);
 		stream << ">";
 		stream << value.getString();
 		endObject(stream, elementName);

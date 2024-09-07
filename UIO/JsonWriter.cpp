@@ -13,6 +13,8 @@ namespace uio
 	{
 	}
 
+	const std::map<char, std::string> g_escapes = { {'\r', "\\r"}, {'\n', "\\n"},{'\t', "\\t"},{'\f',"\\f"},{'\v', "\\v"} };
+
 	static void writeValue(std::ostream& stream, const UItem& value, const JsonSettings& settings, int& indentLevel);
 
 	static void writeProperty(std::ostream& stream, const std::string& key, const UValue& value, const JsonSettings& settings, int& indentLevel)
