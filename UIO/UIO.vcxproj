@@ -148,6 +148,7 @@
     <ClInclude Include="JsonSerializer.h" />
     <ClInclude Include="JsonIOHelper.h" />
     <ClInclude Include="UArray.h" />
+    <ClInclude Include="UIOHelper.h" />
     <ClInclude Include="UObject.h" />
     <ClInclude Include="UPrimitive.h" />
     <ClInclude Include="UIO_All.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="IUSerializable.cpp" />
     <ClCompile Include="JsonSerializer.cpp" />
     <ClCompile Include="UArray.cpp" />
+    <ClCompile Include="UIOHelper.cpp" />
     <ClCompile Include="UObject.cpp" />
     <ClCompile Include="UPrimitive.cpp" />
     <ClCompile Include="JsonIOHelper.cpp" />

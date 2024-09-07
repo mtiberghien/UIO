@@ -3,23 +3,15 @@
 #include <map>
 #include <string>
 #include "UIO.h"
+#include "UIOHelper.h"
 
 
 namespace uio
 {
-	enum E_IndentMode { Increment, Decrement, None };
-
 
 	class JsonIOHelper
 	{
 	public:
-		static bool ichar_equals(char a, char b);
-
-		static bool iequals(const std::string& a, const std::string& b);
-
-		static void handleIndent(std::ostream& stream, bool endl, int& indentLevel, E_IndentMode mode = E_IndentMode::None);
-
-		static std::ostream& doIndent(std::ostream& stream, bool indent, int indentLevel, int indentValue = 4);
 
 		static bool findFirstNonSpaceCharacter(std::istream& stream);
 
@@ -36,8 +28,6 @@ namespace uio
 		static bool setNonStringPrimitiveValue(std::string& primitive, double& result, E_UType& type);
 
 		static bool readNonStringPrimitive(std::istream& stream, double& result, E_UType& type);
-
-		static UIO_API bool tryGetNumber(const std::string& value, double& result, E_UType& type);
 
 	};
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "UItem.h"
-#include "JsonIOHelper.h"
+#include "UIOHelper.h"
 #include "UUndefined.h"
 #include "UValue.h"
 
@@ -36,7 +36,7 @@ namespace uio
 			{
 				double d;
 				E_UType t;
-				return JsonIOHelper::tryGetNumber(getString(), d, t);
+				return UIOHelper::tryGetNumber(getString(), d, t);
 			}
 		}
 		return false;

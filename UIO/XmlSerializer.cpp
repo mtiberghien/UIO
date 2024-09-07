@@ -6,47 +6,47 @@
 
 namespace uio
 {
-	std::string XmlSerializer::serialize(const IUSerializable& object)
+	std::string XmlSerializer::serialize(const IUSerializable& object, const XmlSettings& settings)
 	{
 
 		std::ostringstream s;
-		if (serialize(s, object))
+		if (serialize(s, object, settings))
 		{
 			return s.str();
 		}
 		return "";
 	}
 
-	bool XmlSerializer::serialize(std::ostream& stream, const IUSerializable& object)
+	bool XmlSerializer::serialize(std::ostream& stream, const IUSerializable& object, const XmlSettings& settings)
 	{
 		if (stream.good())
 		{
 			UObject o;
 			object.toObject(o);
 			int indentLevel = 0;
-			XmlWriter::writeItem(stream, o);
+			XmlWriter::writeItem(stream, o, settings);
 			return true;
 		}
 		return false;
 	}
 
-	std::string XmlSerializer::serialize(const UItem& object)
+	std::string XmlSerializer::serialize(const UItem& object, const XmlSettings& settings)
 	{
 
 		std::ostringstream s;
-		if (serialize(s, object))
+		if (serialize(s, object, settings))
 		{
 			return s.str();
 		}
 		return "";
 	}
 
-	bool XmlSerializer::serialize(std::ostream& stream, const UItem& item)
+	bool XmlSerializer::serialize(std::ostream& stream, const UItem& item, const XmlSettings& settings)
 	{
 		if (stream.good())
 		{
 			int indentLevel = 0;
-			XmlWriter::writeItem(stream, item);
+			XmlWriter::writeItem(stream, item, settings);
 			return true;
 		}
 		return false;

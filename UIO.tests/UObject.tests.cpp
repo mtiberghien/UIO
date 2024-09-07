@@ -4,6 +4,7 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #include "UIO_All.h"
+#include "JsonSerializer.h"
 
 using namespace uio;
 

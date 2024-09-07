@@ -1,7 +1,7 @@
 #pragma once
 #include "UItem.h"
 #include "UUndefined.h"
-#include "JsonIOHelper.h"
+#include "UIOHelper.h"
 #include "UIO.h"
 #include "UObject.h"
 #include "UArray.h"
@@ -142,7 +142,7 @@ namespace uio
 		{
 			double d;
 			E_UType t;
-			if (JsonIOHelper::tryGetNumber(getString(), d, t))
+			if (UIOHelper::tryGetNumber(getString(), d, t))
 			{
 				return (float)d;
 			}
@@ -169,7 +169,7 @@ namespace uio
 		{
 			double d;
 			E_UType t;
-			if (JsonIOHelper::tryGetNumber(this->getString(), d, t))
+			if (UIOHelper::tryGetNumber(this->getString(), d, t))
 			{
 				return d;
 			}
@@ -195,7 +195,7 @@ namespace uio
 		{
 			double d;
 			E_UType t;
-			if (JsonIOHelper::tryGetNumber(getString(), d, t))
+			if (UIOHelper::tryGetNumber(getString(), d, t))
 			{
 				return (int)d;
 			}
@@ -221,7 +221,7 @@ namespace uio
 		{
 			double d;
 			E_UType t;
-			if (JsonIOHelper::tryGetNumber(getString(), d, t))
+			if (UIOHelper::tryGetNumber(getString(), d, t))
 			{
 				return (short)d;
 			}

@@ -13,85 +13,91 @@ namespace uio
 	{
 	}
 
-	void writeValue(std::ostream& stream, const UItem& value, bool indent, int& indentLevel);
+	void writeValue(std::ostream& stream, const UItem& value, const JsonSettings& settings, int& indentLevel);
 
-	void writeProperty(std::ostream& stream, const std::string& key, const UValue& value, bool indent, int& indentLevel)
+	void writeProperty(std::ostream& stream, const std::string& key, const UValue& value, const JsonSettings& settings, int& indentLevel)
 	{
-		JsonIOHelper::doIndent(stream, indent, indentLevel) << '"' << key << '"' << ": ";
+		bool indent = settings.getIndent();
+		unsigned short indentValue = settings.getIndentValue();
+		UIOHelper::doIndent(stream, indent, indentLevel, indentValue) << '"' << key << '"' << ": ";
 		if ((value.isObject() || value.isArray()) && value.getInt() > 0)
 		{
-			JsonIOHelper::handleIndent(stream, indent, indentLevel, None);
+			UIOHelper::handleIndent(stream, indent, indentLevel, None);
 			if (value.getType() == E_UType::Object)
 			{
-				JsonIOHelper::doIndent(stream, indent, indentLevel);
+				UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
 			}
 		}
-		writeValue(stream, value, indent, indentLevel);
+		writeValue(stream, value, settings, indentLevel);
 	}
 
-	void writeObject(std::ostream& stream, const UObject& object, bool indent, int& indentLevel)
+	void writeObject(std::ostream& stream, const UObject& object, const JsonSettings& settings, int& indentLevel)
 	{
+		bool indent = settings.getIndent();
+		unsigned short indentValue = settings.getIndentValue();
 		stream << "{";
 		if (!object.isEmpty())
 		{
-			JsonIOHelper::handleIndent(stream, indent, indentLevel, Increment);
+			UIOHelper::handleIndent(stream, indent, indentLevel, Increment);
 			for (auto it = object.begin(); it != object.end(); it++)
 			{
-				writeProperty(stream, it->first, it->second, indent, indentLevel);
+				writeProperty(stream, it->first, it->second, settings, indentLevel);
 				if (it != std::prev(object.end()))
 				{
 					stream << ", ";
-					JsonIOHelper::handleIndent(stream, indent, indentLevel, None);
+					UIOHelper::handleIndent(stream, indent, indentLevel, None);
 				}
 
 			}
-			JsonIOHelper::handleIndent(stream, indent, indentLevel, Decrement);
-			JsonIOHelper::doIndent(stream, indent, indentLevel);
+			UIOHelper::handleIndent(stream, indent, indentLevel, Decrement);
+			UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
 		}
 		stream << "}";
 		if (indentLevel == 0)
 		{
-			JsonIOHelper::handleIndent(stream, indent, indentLevel, None);
+			UIOHelper::handleIndent(stream, indent, indentLevel, None);
 		}
 	}
 
-	void writeArray(std::ostream& stream, const UArray& array, bool indent, int& indentLevel)
+	void writeArray(std::ostream& stream, const UArray& array, const JsonSettings& settings, int& indentLevel)
 	{
+		bool indent = settings.getIndent();
+		unsigned short indentValue = settings.getIndentValue();
 		if (!array.isEmpty())
 		{
-			JsonIOHelper::doIndent(stream, indent, indentLevel);
+			UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
 		}
 		stream << "[";
 		if (!array.isEmpty())
 		{
-			JsonIOHelper::handleIndent(stream, indent, indentLevel, Increment);
+			UIOHelper::handleIndent(stream, indent, indentLevel, Increment);
 			for (auto it = array.begin(); it != array.end(); it++)
 			{
-				JsonIOHelper::doIndent(stream, indent, indentLevel);
-				writeValue(stream, *it, indent, indentLevel);
+				UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
+				writeValue(stream, *it, settings, indentLevel);
 				if (it != std::prev(array.end()))
 				{
 					stream << ", ";
-					JsonIOHelper::handleIndent(stream, indent, indentLevel, None);
+					UIOHelper::handleIndent(stream, indent, indentLevel, None);
 				}
 
 			}
-			JsonIOHelper::handleIndent(stream, indent, indentLevel, Decrement);
-			JsonIOHelper::doIndent(stream, indent, indentLevel);
+			UIOHelper::handleIndent(stream, indent, indentLevel, Decrement);
+			UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
 		}
 		stream << "]";
 		if (indentLevel == 0)
 		{
-			JsonIOHelper::handleIndent(stream, indent, indentLevel, None);
+			UIOHelper::handleIndent(stream, indent, indentLevel, None);
 		}
 	}
 
-	void writeValue(std::ostream& stream, const UItem& value, bool indent, int& indentLevel)
+	void writeValue(std::ostream& stream, const UItem& value, const JsonSettings& settings, int& indentLevel)
 	{
 		switch (value.getType())
 		{
-		case E_UType::Array: writeArray(stream, value.getArray(), indent, indentLevel); break;
-		case E_UType::Object: writeObject(stream, value.getObject(), indent, indentLevel); break;
+		case E_UType::Array: writeArray(stream, value.getArray(), settings, indentLevel); break;
+		case E_UType::Object: writeObject(stream, value.getObject(), settings, indentLevel); break;
 		case E_UType::String:
 			stream << '"';
 			for (char c : value.getString())
@@ -115,7 +121,7 @@ namespace uio
 	void JsonWriter::writeItem(std::ostream& stream, const UItem& value, const JsonSettings& settings)
 	{
 		int indentLevel = 0;
-		writeValue(stream, value, settings.getIndent(), indentLevel);
+		writeValue(stream, value, settings, indentLevel);
 	}
 }
 

@@ -1,6 +1,8 @@
 // JsonModele.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 #include "UIO_All.h"
+#include "JsonSerializer.h"
+#include "XmlSerializer.h"
 #include <iostream>
 
 using namespace uio;

@@ -99,6 +99,9 @@
     <ClInclude Include="XmlSerializer.h">
       <Filter>Header Files\Serializers\Xml</Filter>
     </ClInclude>
+    <ClInclude Include="UIOHelper.h">
+      <Filter>Header Files\Serializers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -148,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="XmlSerializer.cpp">
       <Filter>Source Files\Serializers\Xml</Filter>
+    </ClCompile>
+    <ClCompile Include="UIOHelper.cpp">
+      <Filter>Source Files\Serializers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

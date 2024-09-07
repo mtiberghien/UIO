@@ -1,6 +1,7 @@
 #pragma once
 #include "UIO.h"
 #include "IUSerializable.h"
+#include "XmlWriter.h"
 #include "UItem.h"
 
 namespace uio
@@ -19,10 +20,10 @@ namespace uio
 	class UIO_API XmlSerializer
 	{
 	public:
-		static std::string serialize(const IUSerializable& object);
-		static std::string serialize(const UItem& object);
-		static bool serialize(std::ostream& stream, const IUSerializable& object);
-		static bool serialize(std::ostream& stream, const UItem& item);
+		static std::string serialize(const IUSerializable& object, const XmlSettings& settings = {});
+		static std::string serialize(const UItem& object, const XmlSettings& settings = {});
+		static bool serialize(std::ostream& stream, const IUSerializable& object, const XmlSettings& settings = {});
+		static bool serialize(std::ostream& stream, const UItem& item, const XmlSettings& settings = {});
 		static bool deserialize(const std::string& json, IUSerializable& object);
 		static bool deserialize(const std::string& json, UItem& object);
 		static bool deserialize(std::istream& stream, IUSerializable& object);

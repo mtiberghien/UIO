@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "UArray.h"
 #include "UValue.h"
-#include "JsonIOHelper.h"
+#include "UIOHelper.h"
 #include "UObject.h"
 
 
@@ -11,7 +11,7 @@ namespace uio
 	UValue& UArray::operator[](const std::string& key) {
 		double d;
 		E_UType t;
-		if (JsonIOHelper::tryGetNumber(key, d, t))
+		if (UIOHelper::tryGetNumber(key, d, t))
 		{
 			return m_items[(int)d];
 		}
@@ -25,7 +25,7 @@ namespace uio
 	const UValue& UArray::operator[](const std::string& key) const {
 		double d;
 		E_UType t;
-		if (JsonIOHelper::tryGetNumber(key, d, t))
+		if (UIOHelper::tryGetNumber(key, d, t))
 		{
 			return m_items.at((int)d);
 		}

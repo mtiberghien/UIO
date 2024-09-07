@@ -1,73 +1,14 @@
 #include "pch.h"
 #include "JsonIOHelper.h"
+#include "UIOHelper.h"
 #include "UValue.h"
+
 
 namespace uio
 {
 	const std::map<std::string, char> g_escapes_read = { {"\\r", '\r'} , {"\\n", '\n'}, {"\\t", '\t' }, { "\\f", '\f' }, { "\\v", '\v' } };
 
-	bool JsonIOHelper::tryGetNumber(const std::string& value, double& result, E_UType& type)
-	{
-		char* end = nullptr;
-		type = E_UType::Undefined;
-		double val = strtod(value.c_str(), &end);
-		if (end != value.c_str() && *end == '\0' && val != HUGE_VAL)
-		{
-			result = val;
-			short s = (short)val;
-			if (s == val)
-			{
-				type = E_UType::Short;
-			}
-			else
-			{
-				int i = (int)val;
-				if (i == val)
-				{
-					type = E_UType::Int;
-				}
-				else
-				{
-					type = E_UType::Double;
-				}
-			}
 
-			return true;
-		};
-		return false;
-	}
-
-	bool JsonIOHelper::ichar_equals(char a, char b)
-	{
-		return std::tolower(static_cast<unsigned char>(a)) ==
-			std::tolower(static_cast<unsigned char>(b));
-	}
-
-	bool JsonIOHelper::iequals(const std::string& a, const std::string& b)
-	{
-		return a.size() == b.size() &&
-			std::equal(a.begin(), a.end(), b.begin(), ichar_equals);
-	}
-
-	void JsonIOHelper::handleIndent(std::ostream& stream, bool endl, int& indentLevel, E_IndentMode mode)
-	{
-		switch (mode)
-		{
-		case E_IndentMode::Increment: indentLevel++; break;
-		case E_IndentMode::Decrement: indentLevel--; break;
-		default:break;
-		}
-		if (endl)
-		{
-			stream << std::endl;
-		}
-	}
-
-	std::ostream& JsonIOHelper::doIndent(std::ostream& stream, bool indent, int indentLevel, int indentValue)
-	{
-		stream << std::string(indent * indentLevel * indentValue, ' ');
-		return stream;
-	}
 
 	bool JsonIOHelper::findFirstNonSpaceCharacter(std::istream& stream)
 	{
@@ -150,25 +91,25 @@ namespace uio
 	{
 		double d;
 		E_UType t;
-		return tryGetNumber(value, d, t);
+		return UIOHelper::tryGetNumber(value, d, t);
 	}
 
 	bool JsonIOHelper::setNonStringPrimitiveValue(std::string& primitive, double& result, E_UType& type)
 	{
-		if (iequals(primitive, "null"))
+		if (UIOHelper::iequals(primitive, "null"))
 		{
 			type = E_UType::Null;
 			return true;
 		}
-		if (iequals(primitive, "true") || iequals(primitive, "false"))
+		if (UIOHelper::iequals(primitive, "true") || UIOHelper::iequals(primitive, "false"))
 		{
-			result = (double)(iequals(primitive, "true"));
+			result = (double)(UIOHelper::iequals(primitive, "true"));
 			type = E_UType::Bool;
 			return true;
 		}
 		else
 		{
-			return tryGetNumber(primitive, result, type);
+			return UIOHelper::tryGetNumber(primitive, result, type);
 		}
 
 	}
