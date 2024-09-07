@@ -5,33 +5,72 @@
 
 namespace uio
 {
-	void writeValue(std::ostream& stream, const UItem& value, const XmlSettings& settings, int& indentLevel, const std::string& key = "");
+	static void writeValue(std::ostream& stream, const UItem& value, const XmlSettings& settings, int& indentLevel, const std::string& key = "");
 
-	std::string getSafeXmlValue(const std::string& value)
+	static std::string getSafeXmlValue(const std::string& value)
 	{
 		//Todo handle special characters
 		return value;
 	}
 
-	void writeAttribute(std::ostream& stream, const std::string& key, const UValue& value)
+	static std::ostream& writePrefix(std::ostream& stream, const std::string& prefix)
 	{
-		stream << " " << key << "=\"" << getSafeXmlValue(value.getString()) << "\"";
+		if (!prefix.empty())
+		{
+			stream << prefix << ":";
+		}
+
+		return stream;
 	}
 
-	void writeKey(std::ostream& stream, const std::string& key)
+	static void writeAttribute(std::ostream& stream, const std::string& key, const UValue& value, const std::string& prefix="")
+	{
+		stream << " ";
+		writePrefix(stream, prefix) << key << "=\"" << getSafeXmlValue(value.getString()) << "\"";
+	}
+
+	static void beginObject(std::ostream& stream, const std::string& name, const std::string& prefix="")
+	{
+		stream << "<";
+		writePrefix(stream, prefix) << name;
+	}
+
+	static void endObject(std::ostream& stream, const std::string& name, const std::string& prefix="")
+	{
+		stream << "</";
+		writePrefix(stream, prefix) << name << ">";
+	}
+
+	static void writeKey(std::ostream& stream, const std::string& key)
 	{
 		if (!key.empty())
 		{
-			writeAttribute(stream, "key", key);
+			writeAttribute(stream, "key", key, "uio");
 		}
 	}
 
-	void writeObject(std::ostream& stream, const UObject& object, const XmlSettings& settings, int& indentLevel, const std::string& key)
+	static void declareNameSpace(std::ostream& stream, const std::string& prefix, const std::string& namespaceValue)
+	{
+		std::ostringstream s;
+		s << "xmlns";
+		if (!prefix.empty())
+		{
+			s << ":" << prefix;
+		}
+		writeAttribute(stream, s.str(), namespaceValue);
+	}
+
+	static void writeObject(std::ostream& stream, const UObject& object, const XmlSettings& settings, int& indentLevel, const std::string& key)
 	{
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();
-		UIOHelper::doIndent(stream, indent, indentLevel, indentValue) << "<Object";
+		UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
+		beginObject(stream, toString(E_UType::Object));
 		int childrenCount = 0;
+		if (indentLevel == 0)
+		{
+			declareNameSpace(stream, "uio", "urn:uio:schema");
+		}
 		writeKey(stream, key);
 		if (!object.isEmpty())
 		{
@@ -59,7 +98,8 @@ namespace uio
 				}
 			}
 			UIOHelper::handleIndent(stream, true, indentLevel, E_IndentMode::Decrement);
-			UIOHelper::doIndent(stream, indent, indentLevel, indentValue) << "</Object>";
+			UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
+			endObject(stream, toString(E_UType::Object));
 		}
 		else
 		{
@@ -68,11 +108,12 @@ namespace uio
 		}
 	}
 
-	void writeArray(std::ostream& stream, const UArray& array, const XmlSettings& settings, int& indentLevel, const std::string& key = "")
+	static void writeArray(std::ostream& stream, const UArray& array, const XmlSettings& settings, int& indentLevel, const std::string& key = "")
 	{
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();
-		UIOHelper::doIndent(stream, indent, indentLevel, indentValue) << "<Array";
+		UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
+		beginObject(stream, toString(E_UType::Array));
 		writeKey(stream, key);
 		if (!array.isEmpty())
 		{
@@ -83,7 +124,8 @@ namespace uio
 				writeValue(stream, *it, settings, indentLevel);
 			}
 			UIOHelper::handleIndent(stream, false, indentLevel, E_IndentMode::Decrement);
-			UIOHelper::doIndent(stream, indent, indentLevel, indentValue) << "</Array>";
+			UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
+			endObject(stream, toString(E_UType::Array));
 		}
 		else
 		{
@@ -93,18 +135,19 @@ namespace uio
 		
 	}
 
-	void writePrimitive(std::ostream& stream, const UItem& value, const XmlSettings& settings, int& indentLevel, const std::string& key="")
+	static void writePrimitive(std::ostream& stream, const UItem& value, const XmlSettings& settings, int& indentLevel, const std::string& key="")
 	{
 		bool indent = settings.getIndent();
 		UIOHelper::doIndent(stream, indent, indentLevel, settings.getIndentValue());
-		stream << "<" << toString(value.getType());
+		beginObject(stream, toString(value.getType()));
 		writeKey(stream, key);
 		stream << ">";
-		stream << value.getString() << "</" << toString(value.getType()) << ">";
+		stream << value.getString();
+		endObject(stream, toString(value.getType()));
 		UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 	}
 
-	void writeValue(std::ostream& stream, const UItem& value, const XmlSettings& settings, int& indentLevel, const std::string& key)
+    void writeValue(std::ostream& stream, const UItem& value, const XmlSettings& settings, int& indentLevel, const std::string& key)
 	{
 		switch (value.getType())
 		{
