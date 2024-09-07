@@ -71,7 +71,7 @@ namespace uio
 			std::string fieldPart;
 			if (findFieldPart(stream, fieldPart))
 			{
-				return getValueRecursive(result.getIfExists(fieldPart), stream);
+				return getValueRecursive(result.getOrError(fieldPart), stream);
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace uio
 		std::istringstream ps{ path };
 		if (findFieldPart(ps, fieldPart))
 		{
-			return getValueRecursive(this->getIfExists(fieldPart), ps);
+			return getValueRecursive(this->getOrError(fieldPart), ps);
 		}
 
 		return UUndefinedProvider::getError();

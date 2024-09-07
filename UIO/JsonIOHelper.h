@@ -13,9 +13,6 @@ namespace uio
 	{
 	public:
 
-		static bool findFirstNonSpaceCharacter(std::istream& stream);
-
-
 		static E_ValueMetaType readValueType(std::istream& stream);
 
 

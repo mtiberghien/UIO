@@ -18,7 +18,7 @@ namespace uio
 		return UUndefinedProvider::getError();
 	}
 
-	UValue& UArray::getIfExists(const std::string& key) {
+	UValue& UArray::getOrError(const std::string& key) {
 		return this->operator[](key);
 	}
 

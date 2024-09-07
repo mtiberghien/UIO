@@ -66,4 +66,74 @@ namespace uio
 		stream << std::string(indent * indentLevel * indentValue, ' ');
 		return stream;
 	}
+
+	static std::string readWordLowerCase(std::istream& stream)
+	{
+		std::ostringstream s;
+		while (!stream.eof())
+		{
+			char c = stream.peek();
+			if (!std::isspace(c))
+			{
+				c = stream.get();
+				if (std::isalnum(c))
+				{
+					s << (char)std::tolower(c);
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		return s.str();
+	}
+
+	std::string UIOHelper::toCamelCase(const std::string& value)
+	{
+		if (!value.empty())
+		{
+			std::istringstream input{ value };
+			std::ostringstream output;
+			if (findFirstNonSpaceCharacter(input))
+			{
+				output << (char)std::tolower(input.get());
+				output << readWordLowerCase(input);
+				while (findFirstNonSpaceCharacter(input))
+				{
+					output << (char)std::toupper(input.get());
+					output << readWordLowerCase(input);
+				}
+			}
+			return output.str();
+		}
+		return value;
+	}
+
+	std::string UIOHelper::toPascalCase(const std::string& value)
+	{
+		std::string result = toCamelCase(value);
+		if (!result.empty())
+		{
+			result[0] = (char)std::toupper(result[0]);
+		}
+		return result;
+	}
+
+	bool UIOHelper::findFirstNonSpaceCharacter(std::istream& stream)
+	{
+		while (!stream.eof())
+		{
+			char c = stream.peek();
+			if (std::isspace(c))
+			{
+				stream.get();
+			}
+			else
+			{
+				return c != EOF;
+			}
+		}
+		return false;
+	}
 }

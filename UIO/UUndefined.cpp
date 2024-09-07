@@ -20,7 +20,7 @@ namespace uio
 		return UUndefinedProvider::getError();
 	}
 
-	UValue& UUndefined::getIfExists(const std::string& key)
+	UValue& UUndefined::getOrError(const std::string& key)
 	{
 		return UUndefinedProvider::getError();
 	}

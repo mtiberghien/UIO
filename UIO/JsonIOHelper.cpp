@@ -10,26 +10,9 @@ namespace uio
 
 
 
-	bool JsonIOHelper::findFirstNonSpaceCharacter(std::istream& stream)
-	{
-		while (!stream.eof())
-		{
-			char c = stream.peek();
-			if (std::isspace(c))
-			{
-				stream.get();
-			}
-			else
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	E_ValueMetaType JsonIOHelper::readValueType(std::istream& stream)
 	{
-		if (findFirstNonSpaceCharacter(stream))
+		if (UIOHelper::findFirstNonSpaceCharacter(stream))
 		{
 			switch (stream.peek())
 			{

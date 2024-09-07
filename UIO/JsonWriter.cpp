@@ -13,9 +13,9 @@ namespace uio
 	{
 	}
 
-	void writeValue(std::ostream& stream, const UItem& value, const JsonSettings& settings, int& indentLevel);
+	static void writeValue(std::ostream& stream, const UItem& value, const JsonSettings& settings, int& indentLevel);
 
-	void writeProperty(std::ostream& stream, const std::string& key, const UValue& value, const JsonSettings& settings, int& indentLevel)
+	static void writeProperty(std::ostream& stream, const std::string& key, const UValue& value, const JsonSettings& settings, int& indentLevel)
 	{
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();
@@ -31,7 +31,7 @@ namespace uio
 		writeValue(stream, value, settings, indentLevel);
 	}
 
-	void writeObject(std::ostream& stream, const UObject& object, const JsonSettings& settings, int& indentLevel)
+	static void writeObject(std::ostream& stream, const UObject& object, const JsonSettings& settings, int& indentLevel)
 	{
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();
@@ -59,7 +59,7 @@ namespace uio
 		}
 	}
 
-	void writeArray(std::ostream& stream, const UArray& array, const JsonSettings& settings, int& indentLevel)
+	static void writeArray(std::ostream& stream, const UArray& array, const JsonSettings& settings, int& indentLevel)
 	{
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();

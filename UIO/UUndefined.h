@@ -25,7 +25,7 @@ namespace uio
 		const UValue& operator[](const std::string& key) const override;
 		UValue& operator[](int index) override;
 		const UValue& operator[](int index) const override;
-		UValue& getIfExists(const std::string& key) override;
+		UValue& getOrError(const std::string& key) override;
 	};
 
 	class UUndefinedError : public UUndefined

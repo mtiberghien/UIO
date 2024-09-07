@@ -19,5 +19,10 @@ namespace uio
 		static void handleIndent(std::ostream& stream, bool endl, int& indentLevel, E_IndentMode mode = E_IndentMode::None);
 
 		static std::ostream& doIndent(std::ostream& stream, bool indent, int indentLevel, unsigned short indentValue = 4);
+
+		static bool findFirstNonSpaceCharacter(std::istream& stream);
+
+		static std::string toCamelCase(const std::string& value);
+		static std::string toPascalCase(const std::string& value);
 	};
 }

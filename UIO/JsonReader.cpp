@@ -14,7 +14,7 @@ namespace uio
 	{
 	}
 
-	bool readKey(std::istream& stream, std::string& key)
+	static bool readKey(std::istream& stream, std::string& key)
 	{
 		if (JsonIOHelper::readStringValue(stream, key))
 		{
@@ -23,9 +23,9 @@ namespace uio
 		return false;
 	}
 
-	bool readValue(std::istream& stream, UValue& value, bool& hasNext);
+	static bool readValue(std::istream& stream, UValue& value, bool& hasNext);
 
-	bool readProperty(UObject& object, std::istream& stream, bool& hasNext)
+	static bool readProperty(UObject& object, std::istream& stream, bool& hasNext)
 	{
 		std::string key;
 		bool isOk = false;
@@ -36,7 +36,7 @@ namespace uio
 		return isOk;
 	}
 
-	bool readArray(std::istream& stream, UArray& array)
+	static bool readArray(std::istream& stream, UArray& array)
 	{
 		array.clear();
 		if (JsonIOHelper::readNextCharacter(stream, '['))
@@ -60,7 +60,7 @@ namespace uio
 		return false;
 	}
 
-	bool readObject(std::istream& stream, UObject& object)
+	static bool readObject(std::istream& stream, UObject& object)
 	{
 		object.clear();
 		if (JsonIOHelper::readNextCharacter(stream, '{'))
@@ -83,7 +83,7 @@ namespace uio
 		return false;
 	}
 
-	bool readValue(std::istream& stream, UValue& value, bool& hasNext)
+	static bool readValue(std::istream& stream, UValue& value, bool& hasNext)
 	{
 		bool isOk = false;
 		E_ValueMetaType type = JsonIOHelper::readValueType(stream);
@@ -146,7 +146,7 @@ namespace uio
 		{
 			return false;
 		}
-		hasNext = JsonIOHelper::findFirstNonSpaceCharacter(stream) && stream.peek() == ',';
+		hasNext = UIOHelper::findFirstNonSpaceCharacter(stream) && stream.peek() == ',';
 		if (hasNext)
 		{
 			stream.get();

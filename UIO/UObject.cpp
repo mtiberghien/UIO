@@ -5,7 +5,7 @@
 
 namespace uio
 {
-	UObject::UObject(std::initializer_list < std::pair<const std::string, UValue>> properties): m_properties(properties)
+	UObject::UObject(const std::string& name, std::initializer_list < std::pair<const std::string, UValue>> properties): m_name(name), m_properties(properties)
 	{
 	}
 
@@ -16,6 +16,7 @@ namespace uio
 		{
 			this->operator [](it.first) = it.second;
 		}
+		this->setName(object.getName());
 		return *this;
 	}
 
@@ -36,7 +37,7 @@ namespace uio
 		return m_properties.at(key);
 	}
 
-	UValue& UObject::getIfExists(const std::string& key)
+	UValue& UObject::getOrError(const std::string& key)
 	{
 		if (!exists(key))
 		{

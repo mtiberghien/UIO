@@ -83,7 +83,7 @@ namespace uio
 		UArray& getArray() override { return UArrayProvider::getArrayError(); }
 		const UObject& getObject() const override { return UObjectProvider::getObjectError(); }
 		const UArray& getArray() const override { return UArrayProvider::getArrayError(); }
-		UValue& getIfExists(const std::string& key) override { return UUndefinedProvider::getError(); }
+		UValue& getOrError(const std::string& key) override { return UUndefinedProvider::getError(); }
 
 	private:
 		template<class T>

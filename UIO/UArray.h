@@ -42,8 +42,10 @@ namespace uio
 		virtual UArray& operator=(const UArray& array);
 		std::vector<UValue>::const_iterator begin() const { return m_items.begin(); }
 		std::vector<UValue>::const_iterator end() const { return m_items.end(); }
+		std::vector<UValue>::iterator begin() { return m_items.begin(); }
+		std::vector<UValue>::iterator end() { return m_items.end(); }
 		bool operator==(const IUValue& other) const;
-		UValue& getIfExists(const std::string& key) override;
+		UValue& getOrError(const std::string& key) override;
 	private:
 		std::vector<UValue> m_items;
 	};

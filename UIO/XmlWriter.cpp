@@ -60,12 +60,19 @@ namespace uio
 		writeAttribute(stream, s.str(), namespaceValue);
 	}
 
+	static std::string getElementNameOrType(const std::string key, E_UType type)
+	{
+		std::string result = UIOHelper::toPascalCase(key);
+		return result.empty() ? toString(type) : result;
+	}
+
 	static void writeObject(std::ostream& stream, const UObject& object, const XmlSettings& settings, int& indentLevel, const std::string& key)
 	{
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();
 		UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
-		beginObject(stream, toString(E_UType::Object));
+		std::string elementName = getElementNameOrType(key.empty() ? object.getName() : key, E_UType::Object);
+		beginObject(stream,  elementName);
 		int childrenCount = 0;
 		if (indentLevel == 0)
 		{
@@ -97,9 +104,10 @@ namespace uio
 					writeValue(stream, it->second, settings, indentLevel, it->first);
 				}
 			}
-			UIOHelper::handleIndent(stream, true, indentLevel, E_IndentMode::Decrement);
+			UIOHelper::handleIndent(stream, false, indentLevel, E_IndentMode::Decrement);
 			UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
-			endObject(stream, toString(E_UType::Object));
+			endObject(stream, elementName);
+			UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 		}
 		else
 		{
@@ -113,7 +121,8 @@ namespace uio
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();
 		UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
-		beginObject(stream, toString(E_UType::Array));
+		std::string elementName = getElementNameOrType(key, E_UType::Array);
+		beginObject(stream, elementName);
 		writeKey(stream, key);
 		if (!array.isEmpty())
 		{
@@ -125,7 +134,8 @@ namespace uio
 			}
 			UIOHelper::handleIndent(stream, false, indentLevel, E_IndentMode::Decrement);
 			UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
-			endObject(stream, toString(E_UType::Array));
+			endObject(stream, elementName);
+			UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 		}
 		else
 		{
@@ -139,11 +149,12 @@ namespace uio
 	{
 		bool indent = settings.getIndent();
 		UIOHelper::doIndent(stream, indent, indentLevel, settings.getIndentValue());
-		beginObject(stream, toString(value.getType()));
+		std::string elementName = getElementNameOrType(key, value.getType());
+		beginObject(stream, elementName);
 		writeKey(stream, key);
 		stream << ">";
 		stream << value.getString();
-		endObject(stream, toString(value.getType()));
+		endObject(stream, elementName);
 		UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 	}
 

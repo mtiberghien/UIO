@@ -330,6 +330,15 @@ int main()
     vFind = oTest.find("notFound");
     TestValue(vFind);
     TestValue(oTest["id"]);
-    XmlSerializer::serialize(std::cout, oTest);
+    UObject school{ {"teachers", E_UType::Array}, {"students", E_UType::Array} };
+    school.setName("school");
+    school["students"].getArray() << UObject{{"name", "Mathias Tiberghien"},{"age", 16}} << UObject{{"name", "Pierre Chante"},{"age", 15}};
+    school["teachers"].getArray() << UObject("teacher",{{"name", "Theo Delacoux"}, {"subject", "Mathematics"}}) << UObject("teacher",{{"name", "Bryan Arthaud"}, {"subject", "French"}});
+    UArray& students = school["students"].getArray();
+    for (UObject& o : students)
+    {
+        o.setName("student");
+    }
+    XmlSerializer::serialize(std::cout, school,  "school" );
     std::getchar();
 }

@@ -14,7 +14,9 @@ namespace uio
 	{
 	public:
 		UObject() {}
-		UObject(std::initializer_list < std::pair<const std::string, UValue>> properties);
+		UObject(const std::string& name) : m_name(name) {}
+		UObject(const std::string& name, std::initializer_list < std::pair<const std::string, UValue>> properties);
+		UObject(std::initializer_list < std::pair<const std::string, UValue>> properties) : UObject("", properties) {}
 		virtual ~UObject() { m_properties.clear(); }
 		bool isEmpty() const override { return m_properties.empty(); }
 		E_UType getType() const override { return E_UType::Object; }
@@ -39,9 +41,14 @@ namespace uio
 		virtual UObject& operator=(const UObject& object);
 		std::map<std::string, UValue>::const_iterator begin() const { return m_properties.begin(); }
 		std::map<std::string, UValue>::const_iterator end() const { return m_properties.end(); }
+		std::map<std::string, UValue>::iterator begin() { return m_properties.begin(); }
+		std::map<std::string, UValue>::iterator end() { return m_properties.end(); }
 		bool operator==(const IUValue& other) const override;
-		UValue& getIfExists(const std::string& key) override;
+		UValue& getOrError(const std::string& key) override;
+		const std::string& getName() const { return m_name; }
+		virtual void setName(const std::string& name) { m_name = name; }
 	private:
+		std::string m_name{ "" };
 		std::map<std::string, UValue> m_properties;
 	};
 
@@ -54,6 +61,7 @@ namespace uio
 		UValue& operator[](const std::string& key) override;
 		UValue& operator[](int index) override;
 		UObject& operator=(const UObject& object) override { return *this; }
+		void setName(const std::string& name) override {}
 	};
 
 	class UObjectProvider
