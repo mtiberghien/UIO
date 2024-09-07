@@ -25,25 +25,10 @@ namespace uio
 		return E_ValueMetaType::Error;
 	}
 
-
-	bool JsonIOHelper::readNextCharacter(std::istream& stream, char expectedChar)
-	{
-		while (!stream.eof() && stream.peek() != expectedChar)
-		{
-			stream.get();
-		}
-		if (stream.peek() == expectedChar)
-		{
-			stream.get();
-			return true;
-		}
-		return false;
-	}
-
 	bool JsonIOHelper::readStringValue(std::istream& stream, std::string& value)
 	{
 		std::ostringstream s;
-		if (readNextCharacter(stream, '"'))
+		if (UIOHelper::readNextCharacter(stream, '"'))
 		{
 			while (!stream.eof() && stream.peek() != '"')
 			{
@@ -61,7 +46,7 @@ namespace uio
 				}
 				s << c;
 			}
-			if (readNextCharacter(stream, '"'))
+			if (UIOHelper::readNextCharacter(stream, '"'))
 			{
 				value = s.str();
 				return true;

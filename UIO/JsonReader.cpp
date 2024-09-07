@@ -18,7 +18,7 @@ namespace uio
 	{
 		if (JsonIOHelper::readStringValue(stream, key))
 		{
-			return JsonIOHelper::readNextCharacter(stream, ':');
+			return UIOHelper::readNextCharacter(stream, ':');
 		}
 		return false;
 	}
@@ -39,7 +39,7 @@ namespace uio
 	static bool readArray(std::istream& stream, UArray& array)
 	{
 		array.clear();
-		if (JsonIOHelper::readNextCharacter(stream, '['))
+		if (UIOHelper::readNextCharacter(stream, '['))
 		{
 			bool hasNext = false;
 			bool isOk = false;
@@ -52,7 +52,7 @@ namespace uio
 			{
 				return false;
 			}
-			if (JsonIOHelper::readNextCharacter(stream, ']'))
+			if (UIOHelper::readNextCharacter(stream, ']'))
 			{
 				return true;
 			}
@@ -63,7 +63,7 @@ namespace uio
 	static bool readObject(std::istream& stream, UObject& object)
 	{
 		object.clear();
-		if (JsonIOHelper::readNextCharacter(stream, '{'))
+		if (UIOHelper::readNextCharacter(stream, '{'))
 		{
 			bool hasNext = false;
 			bool isOk = false;
@@ -75,7 +75,7 @@ namespace uio
 			{
 				return false;
 			}
-			if (JsonIOHelper::readNextCharacter(stream, '}'))
+			if (UIOHelper::readNextCharacter(stream, '}'))
 			{
 				return true;
 			}

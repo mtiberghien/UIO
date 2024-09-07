@@ -167,7 +167,14 @@ namespace uio
 		beginObject(stream, elementName);
 		writeNonEmptyAttribute(stream, "key", key);
 		stream << ">";
-		stream << value.getString();
+		if (value.isString())
+		{
+			stream << getSafeXmlValue(value.getString());
+		}
+		else
+		{
+			stream << value.getString();
+		}
 		endObject(stream, elementName);
 		UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 	}

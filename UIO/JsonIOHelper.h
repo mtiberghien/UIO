@@ -15,9 +15,6 @@ namespace uio
 
 		static E_ValueMetaType readValueType(std::istream& stream);
 
-
-		static bool readNextCharacter(std::istream& stream, char expectedChar);
-
 		static bool readStringValue(std::istream& stream, std::string& value);
 
 		static bool  isNumber(const std::string& value);

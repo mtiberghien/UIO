@@ -22,6 +22,8 @@ namespace uio
 
 		static bool findFirstNonSpaceCharacter(std::istream& stream);
 
+		static bool readNextCharacter(std::istream& stream, char expectedChar);
+
 		static std::string toCamelCase(const std::string& value);
 		static std::string toPascalCase(const std::string& value);
 	};

@@ -136,4 +136,18 @@ namespace uio
 		}
 		return false;
 	}
+
+	bool UIOHelper::readNextCharacter(std::istream& stream, char expectedChar)
+	{
+		while (!stream.eof() && stream.peek() != expectedChar)
+		{
+			stream.get();
+		}
+		if (stream.peek() == expectedChar)
+		{
+			stream.get();
+			return true;
+		}
+		return false;
+	}
 }
