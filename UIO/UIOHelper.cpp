@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UIOHelper.h"
 #include "IUValue.h"
+#include <algorithm>
 
 namespace uio
 {
@@ -149,5 +150,12 @@ namespace uio
 			return true;
 		}
 		return false;
+	}
+
+	std::string UIOHelper::toLower(const std::string& value)
+	{
+		std::string result{ value };
+		std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c) {return std::tolower(c); });
+		return result;
 	}
 }

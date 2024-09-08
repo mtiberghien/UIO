@@ -20,6 +20,30 @@ namespace uio
 			}
 			else
 			{
+				if (c>31 && c< 127)
+				{
+					s << c;
+				}
+				else
+				{
+					s << "&x" << std::hex << (int)c << ";";
+				}
+			}
+		}
+		return s.str();
+	}
+
+	static std::string getAlphaNumSafeXmlValue(const std::string& value)
+	{
+		std::ostringstream s;
+		for (char c : value)
+		{
+			if (g_escapes.find(c) != g_escapes.end())
+			{
+				s << g_escapes.at(c);
+			}
+			else
+			{
 				if (std::isalnum(c) || c == ':')
 				{
 					s << c;
@@ -46,7 +70,7 @@ namespace uio
 	static void writeAttribute(std::ostream& stream, const std::string& key, const UValue& value, const std::string& prefix="")
 	{
 		stream << " ";
-		writePrefix(stream, prefix) << getSafeXmlValue(key) << "=\"" << getSafeXmlValue(value.getString()) << "\"";
+		writePrefix(stream, prefix) << getAlphaNumSafeXmlValue(key) << "=\"" << getSafeXmlValue(value.getString()) << "\"";
 	}
 
 	static void beginObject(std::ostream& stream, const std::string& name, const std::string& prefix="")
@@ -116,7 +140,7 @@ namespace uio
 		}
 		if (childrenCount>0)
 		{
-			stream << "/>";
+			stream << ">";
 			UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::Increment);
 			for (auto it = object.begin(); it != object.end(); it++)
 			{

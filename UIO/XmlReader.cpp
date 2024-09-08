@@ -5,7 +5,7 @@
 
 namespace uio
 {
-	enum E_MarkupType{System, SystemData, Comment, Normal};
+	enum E_MarkupType{System, SystemData, Comment, BeginMarkup, EndMarkup};
 
 	const std::map< std::string, char> g_escapes_read = { {"lt", '<'},{"gt", '>'},{"amp", '&'},{"apos", '\''}, {"quot", '\"'} };
 
@@ -31,7 +31,9 @@ namespace uio
 			}		
 			return E_MarkupType::SystemData;
 		}
-		default: return E_MarkupType::Normal;
+		case '/': stream.get();
+			return E_MarkupType::EndMarkup;
+		default: return E_MarkupType::BeginMarkup;
 		}
 	}
 
@@ -88,14 +90,15 @@ namespace uio
 		UIOHelper::readNextCharacter(stream, '>');
 	}
 
-	static bool getFirstNormalMarkup(std::istream& stream)
+	static bool getFirstBeginMarkup(std::istream& stream, E_MarkupType& type)
 	{
 		if(findMarkup(stream))
 		{
-			E_MarkupType t = getMarkupType(stream);
-			switch (t)
+			type = getMarkupType(stream);
+			switch (type)
 			{
-			case E_MarkupType::Normal: return true;
+			case E_MarkupType::BeginMarkup: return true;
+			case E_MarkupType::EndMarkup: return false;
 			case E_MarkupType::Comment:
 				skipComment(stream);
 				break;
@@ -106,7 +109,7 @@ namespace uio
 				skipSystemDataMarkup(stream);
 				break;
 			}
-			return getFirstNormalMarkup(stream);
+			return getFirstBeginMarkup(stream, type);
 		}
 		return false;
 	}
@@ -141,7 +144,18 @@ namespace uio
 		return false;
 	}
 
-	static bool readKey(std::istream& stream, std::string& prefix, std::string& key)
+	static bool readSafeChar(std::istream& stream, char& c)
+	{
+		switch (c)
+		{
+		case '&':
+			return readSpecial(stream, c);
+		default:
+			return true;
+		}
+	}
+
+	static bool readAttributeKey(std::istream& stream, std::string& prefix, std::string& key)
 	{
 		std::ostringstream buffer;
 		while (!stream.eof())
@@ -152,24 +166,21 @@ namespace uio
 				switch (c)
 				{
 				case ':':
-					prefix == buffer.str();
-					buffer.clear();
+					prefix = buffer.str();
+					buffer.str("");
 					break;
 				case '=':
 					key = buffer.str();
 					return true;
-				case '&':
-					if (readSpecial(stream, c))
+				default:
+					if (readSafeChar(stream, c))
 					{
 						buffer << c;
-						break;
 					}
 					else
 					{
 						return false;
 					}
-				default:
-					buffer << c;
 					break;
 				}
 			}
@@ -178,8 +189,32 @@ namespace uio
 		return false;
 	}
 
-	static bool readValue(std::istream&, std::string& value)
+	static bool readAttributeValue(std::istream& stream, std::string& value)
 	{
+		if (UIOHelper::readNextCharacter(stream, '\"'))
+		{
+			std::ostringstream s;
+			while (!stream.eof())
+			{
+				char c = stream.get();
+				if (readSafeChar(stream, c))
+				{
+					if (c == '\"')
+					{
+						value = s.str();
+						return true;
+					}
+					else
+					{
+						s << c;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
 		return false;
 	}
 
@@ -217,65 +252,174 @@ namespace uio
 		
 	}
 
-	static bool readAttributes(std::istream& stream, UObject& object, bool& hasChildren)
+	static bool readAttributes(std::istream& stream, UItem& item, bool& hasChildren, std::string& key)
 	{
-		if (UIOHelper::findFirstNonSpaceCharacter(stream))
+		while (UIOHelper::findFirstNonSpaceCharacter(stream))
 		{
-			std::string prefix{ "" };
-			std::string key{ "" };
-			std::string value{ "" };
-			if (readKey(stream, prefix, key) && readValue(stream, value))
+			if (stream.peek() == '/')
 			{
-				if (prefix.empty())
+				stream.get();
+				if (stream.peek() == '>')
 				{
-					setValue(object[key], value);
+					hasChildren = false;
+					return true;
+				}
+			}
+			else  if (stream.peek() == '>')
+			{
+				stream.get();
+				hasChildren = true;
+				return true;
+			}
+			std::string prefix{ "" };
+			std::string attributeKey{ "" };
+			std::string value{ "" };
+			if (readAttributeKey(stream, prefix, attributeKey) && readAttributeValue(stream, value))
+			{
+				bool isUIOSchema = UIOHelper::iequals("uio", prefix);
+				bool isUIOName = isUIOSchema && UIOHelper::iequals("name", attributeKey);
+				bool isAttribute = prefix.empty();
+				bool shouldBeObject = isAttribute || isUIOName;
+				if (shouldBeObject && item.isUndefined())
+				{
+					((UValue&)item) = E_UType::Object;
+
+				}
+				if (item.isObject())
+				{
+					if (isAttribute)
+					{
+						setValue(item[attributeKey], value);
+					}
+					if (isUIOName)
+					{
+						item.getObject().setName(value);
+					}
+				}
+				if (isUIOSchema && UIOHelper::iequals("key", attributeKey))
+				{
+					key = value;
 				}
 			}
 		}
 		return false;
 	}
 
-	static bool readObject(std::istream& stream, UObject& object)
+	static std::string getElementName(std::istream& stream)
 	{
-		if (getFirstNormalMarkup(stream))
+		std::ostringstream s;
+		while (!stream.eof())
 		{
-			std::string elementName = UIOHelper::readWordLowerCase(stream);
-			bool hasChildren;
-			if (readAttributes(stream, object, hasChildren))
+			char c = stream.peek();
+			if ( std::isspace(c) || c == '>')
 			{
-
+				return s.str();
 			}
 			else
 			{
-				return false;
+				c = stream.get();
+				s << c;
 			}
 		}
-		return false;
 	}
 
-	static bool readArray(std::istream& stream, UArray& array)
+	static std::string getValueContent(std::istream& stream)
 	{
-		return false;
+		std::ostringstream s;
+		while (!stream.eof())
+		{
+			char c = stream.peek();
+			if (c != '<')
+			{
+				c = stream.get();
+				s << c;
+			}
+			else
+			{
+				return s.str();
+			}
+		}
 	}
 
-	static bool readValue(std::istream& stream, UValue& value)
+	static bool readMarkupItem(std::istream& stream, UItem& item, std::string& key, E_MarkupType& foundType)
 	{
+		if (getFirstBeginMarkup(stream, foundType))
+		{
+			std::string elementName = getElementName(stream);
+			bool hasContent;
+			if (readAttributes(stream, item, hasContent, key))
+			{
+				if(item.isObject())
+				{
+					UObject& o = item.getObject();
+					if (o.getName().empty() && !UIOHelper::iequals(toString(E_UType::Object), elementName))
+					{
+						o.setName(UIOHelper::toLower(elementName));
+					}			
+				}
+				if (hasContent)
+				{
+					if (UIOHelper::findFirstNonSpaceCharacter(stream))
+					{
+						if (stream.peek() == '<')
+						{
+							if (item.isUndefined())
+							{
+								((UValue&)item) = E_UType::Array;
+							}
+							bool hasNext = false;
+							do
+							{
+								std::string childKey;
+								UValue child;
+								hasNext = readMarkupItem(stream, child, childKey, foundType);
+								if (!hasNext)
+								{
+									if (foundType == E_MarkupType::EndMarkup)
+									{
+										std::string endElementName = getElementName(stream);
+										UIOHelper::readNextCharacter(stream, '>');
+										return elementName == endElementName;
+									}
+									return false;
+								}
+								if (item.isObject())
+								{
+									item[childKey] = child;
+								}
+								else if (item.isArray())
+								{
+									item.getArray().push_back(child);
+								}
+							} while (hasNext);
+						}
+						else
+						{
+							std::string value = getValueContent(stream);
+							if (item.isUndefined())
+							{
+								setValue((UValue&)item, value);
+								return !getFirstBeginMarkup(stream, foundType) && foundType == E_MarkupType::EndMarkup && getElementName(stream) == elementName && UIOHelper::readNextCharacter(stream, '>');
+
+							}
+							return false;
+						}
+					}
+					
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
 	bool XmlReader::readItem(std::istream& stream, UItem& item)
 	{
-		if (item.isObject())
-		{
-			return readObject(stream, item.getObject());
-		}
-		else if (item.isArray())
-		{
-			return readArray(stream, item.getArray());
-		}
-		else
-		{
-			return readValue(stream, static_cast<UValue&>(item));
-		}
+		std::string key{ "" };
+		E_MarkupType lastMarkupFound;
+		return readMarkupItem(stream, item, key, lastMarkupFound);
 	}
 }

@@ -215,10 +215,15 @@ void TestSerialization()
     */
 }
 
+void setValue(UValue& v)
+{
+    UValue value = 1;
+    v = value;
+}
+
 
 int main()
 {
-   std::locale::global(std::locale(""));
    E_UType types[] = { E_UType::Bool, E_UType::Short, E_UType::Int, E_UType::Float, E_UType::Double, E_UType::String };
     UObject o;
     UObject so;
@@ -335,11 +340,18 @@ int main()
     school.setName("school");
     school["students"].getArray() << UObject{{"name", "Mathias Tiberghien"},{"age", 16}} << UObject{{"name", "Pierre Chante"},{"age", 15}};
     school["teachers"].getArray() << UObject("teacher",{{"name", "Theo Delacoux"}, {"subject", "Mathematics"}}) << UObject("teacher",{{"name", "Bryan Arthaud"}, {"subject", "French"}});
+    school["notes"] = UArray{ 12,"16", UObject{{"note", 15.4}},20,18 };
     UArray& students = school["students"].getArray();
     for (UObject& o : students)
     {
         o.setName("student");
     }
-    XmlSerializer::serialize(std::cout, school,  "school" );
+    std::string xmlString = XmlSerializer::serialize(school);
+    UObject xmlObject;
+    std::cout << xmlString << std::endl;
+    XmlSerializer::deserialize(xmlString, xmlObject);
+    XmlSerializer::serialize(std::cout, xmlObject);
+    JsonSerializer::serialize(std::cout, xmlObject, true);
+    
     //std::getchar();
 }

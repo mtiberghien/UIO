@@ -42,7 +42,7 @@ namespace uio
 		return false;
 	}
 
-	bool findFieldPart(std::istream& stream, std::string& fieldPart)
+	static bool findFieldPart(std::istream& stream, std::string& fieldPart)
 	{
 		std::ostringstream s;
 		int sizeRead = 0;
@@ -64,7 +64,7 @@ namespace uio
 		return sizeRead > 0;
 	}
 
-	UValue& getValueRecursive(UValue& result, std::istream& stream)
+	static UValue& getValueRecursive(UValue& result, std::istream& stream)
 	{
 		if (!result.isError())
 		{
@@ -78,7 +78,7 @@ namespace uio
 		return result;
 	}
 
-	const UValue& getValueRecursive(const UValue& result, std::istream& stream)
+	static const UValue& getValueRecursive(const UValue& result, std::istream& stream)
 	{
 		if (!result.isError())
 		{

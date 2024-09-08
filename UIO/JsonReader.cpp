@@ -14,7 +14,7 @@ namespace uio
 	{
 	}
 
-	static bool readKey(std::istream& stream, std::string& key)
+	static bool readAttributeKey(std::istream& stream, std::string& key)
 	{
 		if (JsonIOHelper::readStringValue(stream, key))
 		{
@@ -29,7 +29,7 @@ namespace uio
 	{
 		std::string key;
 		bool isOk = false;
-		if (readKey(stream, key))
+		if (readAttributeKey(stream, key))
 		{
 			isOk = readValue(stream, object[key], hasNext);
 		}
