@@ -24,6 +24,8 @@ namespace uio
 
 		static bool readNextCharacter(std::istream& stream, char expectedChar);
 
+		static std::string readWordLowerCase(std::istream& stream);
+
 		static std::string toCamelCase(const std::string& value);
 		static std::string toPascalCase(const std::string& value);
 	};

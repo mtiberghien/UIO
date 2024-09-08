@@ -67,7 +67,7 @@ namespace uio
 		return stream;
 	}
 
-	static std::string readWordLowerCase(std::istream& stream)
+	std::string UIOHelper::readWordLowerCase(std::istream& stream)
 	{
 		std::ostringstream s;
 		while (!stream.eof())

@@ -218,6 +218,7 @@ void TestSerialization()
 
 int main()
 {
+   std::locale::global(std::locale(""));
    E_UType types[] = { E_UType::Bool, E_UType::Short, E_UType::Int, E_UType::Float, E_UType::Double, E_UType::String };
     UObject o;
     UObject so;
@@ -340,5 +341,5 @@ int main()
         o.setName("student");
     }
     XmlSerializer::serialize(std::cout, school,  "school" );
-    std::getchar();
+    //std::getchar();
 }

@@ -7,6 +7,8 @@ namespace uio
 {
 	enum E_MarkupType{System, SystemData, Comment, Normal};
 
+	const std::map< std::string, char> g_escapes_read = { {"lt", '<'},{"gt", '>'},{"amp", '&'},{"apos", '\''}, {"quot", '\"'} };
+
 	static E_MarkupType getMarkupType(std::istream& stream)
 	{
 		char c = stream.peek();
@@ -44,11 +46,7 @@ namespace uio
 
 	static bool readMarkup(std::istream& stream, UItem& value)
 	{
-		E_MarkupType t = getMarkupType(stream);
-		switch (t)
-		{
-
-		}
+		return false;
 	}
 
 	static void skipComment(std::istream& stream)
@@ -113,8 +111,145 @@ namespace uio
 		return false;
 	}
 
+	static bool readSpecial(std::istream& stream, char& c)
+	{
+		std::string special;
+		if (std::getline(stream, special, ';'))
+		{
+			if (g_escapes_read.find(special) != g_escapes_read.end())
+			{
+				c = g_escapes_read.at(special);
+				return true;
+			}
+			else
+			{
+				int c_code;
+				if (std::tolower(special[0]) == 'x')
+				{
+					std::istringstream s{ special.substr(1) };
+					s >> std::hex >> c_code;
+				}
+				else
+				{
+					std::istringstream s{ special};
+					s >> std::dec >> c_code;
+				}
+				c = (char)c_code;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	static bool readKey(std::istream& stream, std::string& prefix, std::string& key)
+	{
+		std::ostringstream buffer;
+		while (!stream.eof())
+		{
+			char c = stream.get();
+			if (!std::isspace(c))
+			{
+				switch (c)
+				{
+				case ':':
+					prefix == buffer.str();
+					buffer.clear();
+					break;
+				case '=':
+					key = buffer.str();
+					return true;
+				case '&':
+					if (readSpecial(stream, c))
+					{
+						buffer << c;
+						break;
+					}
+					else
+					{
+						return false;
+					}
+				default:
+					buffer << c;
+					break;
+				}
+			}
+
+		}
+		return false;
+	}
+
+	static bool readValue(std::istream&, std::string& value)
+	{
+		return false;
+	}
+
+	static void setValue(UValue& uValue, const std::string& sValue)
+	{
+		E_UType t;
+		double d;
+		if (UIOHelper::tryGetNumber(sValue, d, t))
+		{
+			switch (t)
+			{
+			case E_UType::Bool: uValue = d == (double)1; break;
+			case E_UType::Short: uValue = (short)d; break;
+			case E_UType::Int: uValue = (int)d; break;
+			case E_UType::Float: uValue = (float)d; break;
+			default: uValue = d; break;
+			}
+		}
+		else if (UIOHelper::iequals(sValue, "null"))
+		{
+			uValue = nullptr;
+		}
+		else
+		{
+			bool b_true = UIOHelper::iequals(sValue, "true");
+			if (b_true || UIOHelper::iequals(sValue, "false"))
+			{
+				uValue = b_true;
+			}
+			else
+			{
+				uValue = sValue;
+			}
+		}
+		
+	}
+
+	static bool readAttributes(std::istream& stream, UObject& object, bool& hasChildren)
+	{
+		if (UIOHelper::findFirstNonSpaceCharacter(stream))
+		{
+			std::string prefix{ "" };
+			std::string key{ "" };
+			std::string value{ "" };
+			if (readKey(stream, prefix, key) && readValue(stream, value))
+			{
+				if (prefix.empty())
+				{
+					setValue(object[key], value);
+				}
+			}
+		}
+		return false;
+	}
+
 	static bool readObject(std::istream& stream, UObject& object)
 	{
+		if (getFirstNormalMarkup(stream))
+		{
+			std::string elementName = UIOHelper::readWordLowerCase(stream);
+			bool hasChildren;
+			if (readAttributes(stream, object, hasChildren))
+			{
+
+			}
+			else
+			{
+				return false;
+			}
+		}
 		return false;
 	}
 

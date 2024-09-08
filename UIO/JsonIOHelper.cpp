@@ -69,9 +69,10 @@ namespace uio
 			type = E_UType::Null;
 			return true;
 		}
-		if (UIOHelper::iequals(primitive, "true") || UIOHelper::iequals(primitive, "false"))
+		bool b_true = UIOHelper::iequals(primitive, "true");
+		if (b_true || UIOHelper::iequals(primitive, "false"))
 		{
-			result = (double)(UIOHelper::iequals(primitive, "true"));
+			result = (double)(b_true);
 			type = E_UType::Bool;
 			return true;
 		}
