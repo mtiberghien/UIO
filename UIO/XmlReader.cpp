@@ -218,18 +218,23 @@ namespace uio
 		return false;
 	}
 
-	static void setValue(UValue& uValue, const std::string& sValue)
+	static void setValue(UValue& uValue, const std::string& sValue, E_UType desiredType = E_UType::Undefined)
 	{
 		E_UType t;
 		double d;
 		if (UIOHelper::tryGetNumber(sValue, d, t))
 		{
+			if (desiredType != E_UType::Undefined)
+			{
+				t = desiredType;
+			}
 			switch (t)
 			{
 			case E_UType::Bool: uValue = d == (double)1; break;
 			case E_UType::Short: uValue = (short)d; break;
 			case E_UType::Int: uValue = (int)d; break;
 			case E_UType::Float: uValue = (float)d; break;
+			case E_UType::String: uValue = sValue; break;
 			default: uValue = d; break;
 			}
 		}
@@ -398,7 +403,7 @@ namespace uio
 							std::string value = getValueContent(stream);
 							if (item.isUndefined())
 							{
-								setValue((UValue&)item, value);
+								setValue((UValue&)item, value, fromString(elementName));
 								return !getFirstBeginMarkup(stream, foundType) && foundType == E_MarkupType::EndMarkup && getElementName(stream) == elementName && UIOHelper::readNextCharacter(stream, '>');
 
 							}

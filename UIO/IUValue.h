@@ -9,6 +9,7 @@ namespace uio
 	enum class E_ValueMetaType { Object, Array, StringPrimitive, NonStringPrimitive, Error};
 
 	UIO_API extern std::string toString(E_UType type);
+	UIO_API extern E_UType fromString(const std::string& type);
 
 	class UValue;
 	class UObject;

@@ -24,6 +24,21 @@ namespace uio
 		}
 	}
 
+	E_UType fromString(const std::string& type)
+	{
+		if (type == "Double") return E_UType::Double;
+		if (type == "Int") return E_UType::Int;
+		if (type == "Bool") return E_UType::Bool;
+		if (type == "Float") return E_UType::Float;
+		if (type == "Short") return E_UType::Short;
+		if (type == "String") return E_UType::String;
+		if (type == "Object") return E_UType::Object;
+		if (type == "Array") return E_UType::Array;
+		if (type == "Null") return E_UType::Null;
+		if (type == "Error") return E_UType::Error;
+		return E_UType::Undefined;
+	}
+
 	bool UItem::isNumber() const
 	{
 		if (isPrimitive() && !isNull())

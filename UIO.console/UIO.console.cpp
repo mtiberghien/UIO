@@ -15,6 +15,7 @@ public:
     Item(const std::string& name, int id) : m_name(name), m_id(id) {}
     void toObject(UObject& object) const override
     {
+        object.setName("item");
         object["name"] = m_name;
         object["id"] = m_id;
     }
@@ -38,6 +39,7 @@ public:
     }
     void toObject(UObject& object) const override
     {
+        object.setName("items");
         UArray l_devices;
         for (auto& d : m_items)
         {
