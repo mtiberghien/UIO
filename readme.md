@@ -8,7 +8,6 @@ A first implementation use json serialization.
 1. Compile UIO project that will produce UIO.lib and UIO.dll
 1. In your c++ project, ensure to include all required header files:
     - IUContainer.h
-    - IUSerializable.h
     - IUValue.h
     - UArray.h
     - UObject.h
@@ -19,9 +18,14 @@ A first implementation use json serialization.
     - UItem.h
     - UValue.h
     - UUndefined.h
+    - IUSerializable.h
+    - UIOHelper.h
     - JsonSerializer.h
     - JsonReader.h
     - JsonWriter.h
+    - XmlSerializer.h
+    - XmlReader.h
+    - XmlWriter.h
 1. In your c++ project, ensure to link to ``UIO.lib``
 1. In your c++ code, just include `UIO_All.h` file that includes all you need. You might want to use namespace json to simplify the code
 1. At runtime, your application will need ``UIO.dll``
