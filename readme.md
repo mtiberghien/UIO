@@ -29,7 +29,7 @@ A first implementation use json serialization.
 # Usage
 The interface `IUSerializable` is dedicated to define `readObject` and `writeObject` method which is implemented by the model classes to map each property to a common object: `UObject` which is a dictionary mapping keys to `UValue` object.
 A `UValue` can be one of `UArray`, `UObject` or a `UPrimitive` which supports boolean, short, int, float, double, std::string and const char* primitives.
-## IJsonSerializable
+## IUSerializable
 ```cpp
 #include "UIO_All.h"
 
@@ -146,7 +146,7 @@ int main()
 
 ```
 
-## JsonObject
+## UObject
 A `UObject` can be initialized with a json string or filled using operator []; The type of JsonValue is inferred from the primitive type or can be a `UObject` or a `UArray`.
 Note that a copy is used when adding an object or an array. They should be filled to be added to the parent object.
 A `UObject` can be written to or read from a string or a stream.
