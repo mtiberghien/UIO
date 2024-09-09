@@ -4,7 +4,7 @@ It uses the standard library but was created to be used as a dll in Windows envi
 The purpose of this project is to have an intuitive object abstraction that allows reflexion to be able to create different serializers. The core library, developed in modern c++ defines inspectable objects that doesn't throw exception and optimizes memory usage.
 A first implementation use json serialization.
 # Installation
-<u><b>Note:</b></u> The library was developped for a windows usage but has no other dependency to windows library than `__declspec` defined in ``JsonIO.h``.
+<u><b>Note:</b></u> The library was developped for a windows usage but has no other dependency to windows library than `__declspec` defined in ``UIO.h``.
 1. Compile UIO project that will produce UIO.lib and UIO.dll
 1. In your c++ project, ensure to include all required header files:
     - IUContainer.h
