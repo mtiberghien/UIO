@@ -355,16 +355,10 @@ int main()
     std::string xmlString = XmlSerializer::serialize(school);
     UObject xmlObject;
     std::cout << xmlString << std::endl;
-    std::ofstream xmlFile{ "test.xml" };
-    std::ofstream jsonFile{ "test.json" };
     XmlSerializer::deserialize(xmlString, xmlObject);
     XmlSerializer::serialize(std::cout, xmlObject);
-
     JsonSerializer::serialize(std::cout, xmlObject, true);
-    XmlSerializer::serialize(xmlFile, xmlObject);
-    std::string jsonString = JsonSerializer::serialize(school);
-    std::cout << jsonString << std::endl;
-    JsonSerializer::serialize(jsonFile, xmlObject, true);
+
     
     //std::getchar();
 }
