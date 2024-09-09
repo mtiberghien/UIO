@@ -1,7 +1,6 @@
 #pragma once
 #include "UItem.h"
 #include "UIO.h"
-#include <vector>
 #include "IUContainer.h"
 
 namespace uio

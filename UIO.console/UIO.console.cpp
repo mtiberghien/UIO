@@ -4,6 +4,9 @@
 #include "JsonSerializer.h"
 #include "XmlSerializer.h"
 #include <iostream>
+#include <fstream>
+#include <io.h>
+#include <fcntl.h>
 
 using namespace uio;
 
@@ -226,6 +229,7 @@ void setValue(UValue& v)
 
 int main()
 {
+    setlocale(LC_ALL, "en-US");
    E_UType types[] = { E_UType::Bool, E_UType::Short, E_UType::Int, E_UType::Float, E_UType::Double, E_UType::String };
     UObject o;
     UObject so;
@@ -340,8 +344,8 @@ int main()
     TestValue(oTest["id"]);
     UObject school{ {"teachers", E_UType::Array}, {"students", E_UType::Array} };
     school.setName("school");
-    school["students"].getArray() << UObject{{"name", "Mathias Tiberghien"},{"age", 16}} << UObject{{"name", "Pierre Chante"},{"age", 15}};
-    school["teachers"].getArray() << UObject("teacher",{{"name", "Theo Delacoux"}, {"subject", "Mathematics"}}) << UObject("teacher",{{"name", "Bryan Arthaud"}, {"subject", "French"}});
+    school["students"].getArray() << UObject{{"name", "Frédéric Jamard"},{"age", 16}} << UObject{{"name", "John Charte"},{"age", 15}};
+    school["teachers"].getArray() << UObject("teacher",{{"name", "Thierry Delcourt"}, {"subject", "Mathematics"}}) << UObject("teacher",{{"name", "Bernard Artman"}, {"subject", "French"}});
     school["notes"] = UArray{ 12,"16", UObject{{"note", 15.4}},20,18 };
     UArray& students = school["students"].getArray();
     for (UObject& o : students)
@@ -351,9 +355,16 @@ int main()
     std::string xmlString = XmlSerializer::serialize(school);
     UObject xmlObject;
     std::cout << xmlString << std::endl;
+    std::ofstream xmlFile{ "test.xml" };
+    std::ofstream jsonFile{ "test.json" };
     XmlSerializer::deserialize(xmlString, xmlObject);
     XmlSerializer::serialize(std::cout, xmlObject);
+
     JsonSerializer::serialize(std::cout, xmlObject, true);
+    XmlSerializer::serialize(xmlFile, xmlObject);
+    std::string jsonString = JsonSerializer::serialize(school);
+    std::cout << jsonString << std::endl;
+    JsonSerializer::serialize(jsonFile, xmlObject, true);
     
     //std::getchar();
 }

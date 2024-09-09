@@ -13,7 +13,7 @@ namespace uio
 	{
 	}
 
-	const std::map<char, std::string> g_escapes = { {'\r', "\\r"}, {'\n', "\\n"},{'\t', "\\t"},{'\f',"\\f"},{'\v', "\\v"} };
+	const std::map<unsigned char, std::string> g_escapes = { {'\r', "\\r"}, {'\n', "\\n"},{'\t', "\\t"},{'\f',"\\f"},{'\v', "\\v"} };
 
 	static void writeValue(std::ostream& stream, const UItem& value, const JsonSettings& settings, int& indentLevel);
 
@@ -102,7 +102,7 @@ namespace uio
 		case E_UType::Object: writeObject(stream, value.getObject(), settings, indentLevel); break;
 		case E_UType::String:
 			stream << '"';
-			for (char c : value.getString())
+			for (unsigned char c : value.getString())
 			{
 				if (g_escapes.find(c) != g_escapes.end())
 				{

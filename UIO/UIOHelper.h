@@ -1,7 +1,6 @@
 #pragma once
 #include "UIO.h"
 #include "IUValue.h"
-#include <ostream>
 
 namespace uio
 {
@@ -22,7 +21,7 @@ namespace uio
 
 		static bool findFirstNonSpaceCharacter(std::istream& stream);
 
-		static bool readNextCharacter(std::istream& stream, char expectedChar);
+		static bool readNextCharacter(std::istream& stream, unsigned char expectedChar);
 
 		static std::string readWordLowerCase(std::istream& stream);
 

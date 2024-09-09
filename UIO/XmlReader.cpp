@@ -7,11 +7,11 @@ namespace uio
 {
 	enum E_MarkupType{System, SystemData, Comment, BeginMarkup, EndMarkup};
 
-	const std::map< std::string, char> g_escapes_read = { {"lt", '<'},{"gt", '>'},{"amp", '&'},{"apos", '\''}, {"quot", '\"'} };
+	const std::map< std::string, unsigned char> g_escapes_read = { {"lt", '<'},{"gt", '>'},{"amp", '&'},{"apos", '\''}, {"quot", '\"'} };
 
 	static E_MarkupType getMarkupType(std::istream& stream)
 	{
-		char c = stream.peek();
+		unsigned char c = stream.peek();
 		switch (c)
 		{
 		case '?': stream.get();
@@ -46,18 +46,13 @@ namespace uio
 		return false;
 	}
 
-	static bool readMarkup(std::istream& stream, UItem& value)
-	{
-		return false;
-	}
-
 	static void skipComment(std::istream& stream)
 	{
 		if (UIOHelper::readNextCharacter(stream, '-'))
 		{
 			if (stream.peek() == '-')
 			{
-				char c = stream.get();
+				unsigned char c = stream.get();
 				if (stream.peek() != '>')
 				{
 					skipComment(stream);
@@ -114,7 +109,7 @@ namespace uio
 		return false;
 	}
 
-	static bool readSpecial(std::istream& stream, char& c)
+	static bool readSpecial(std::istream& stream, unsigned char& c)
 	{
 		std::string special;
 		if (std::getline(stream, special, ';'))
@@ -137,14 +132,14 @@ namespace uio
 					std::istringstream s{ special};
 					s >> std::dec >> c_code;
 				}
-				c = (char)c_code;
+				c = static_cast<unsigned char>(c_code);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	static bool readSafeChar(std::istream& stream, char& c)
+	static bool readSafeChar(std::istream& stream, unsigned char& c)
 	{
 		switch (c)
 		{
@@ -160,7 +155,7 @@ namespace uio
 		std::ostringstream buffer;
 		while (!stream.eof())
 		{
-			char c = stream.get();
+			unsigned char c = stream.get();
 			if (!std::isspace(c))
 			{
 				switch (c)
@@ -196,7 +191,7 @@ namespace uio
 			std::ostringstream s;
 			while (!stream.eof())
 			{
-				char c = stream.get();
+				unsigned char c = stream.get();
 				if (readSafeChar(stream, c))
 				{
 					if (c == '\"')
@@ -315,7 +310,7 @@ namespace uio
 		std::ostringstream s;
 		while (!stream.eof())
 		{
-			char c = stream.peek();
+			unsigned char c = stream.peek();
 			if ( std::isspace(c) || c == '>')
 			{
 				return s.str();
@@ -333,7 +328,7 @@ namespace uio
 		std::ostringstream s;
 		while (!stream.eof())
 		{
-			char c = stream.peek();
+			unsigned char c = stream.peek();
 			if (c != '<')
 			{
 				c = stream.get();

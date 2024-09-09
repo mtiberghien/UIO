@@ -73,13 +73,13 @@ namespace uio
 		std::ostringstream s;
 		while (!stream.eof())
 		{
-			char c = stream.peek();
+			unsigned char c = stream.peek();
 			if (!std::isspace(c))
 			{
 				c = stream.get();
 				if (std::isalnum(c))
 				{
-					s << (char)std::tolower(c);
+					s << static_cast<unsigned char>(std::tolower(c));
 				}
 			}
 			else
@@ -98,11 +98,11 @@ namespace uio
 			std::ostringstream output;
 			if (findFirstNonSpaceCharacter(input))
 			{
-				output << (char)std::tolower(input.get());
+				output << static_cast<unsigned char>(std::tolower(input.get()));
 				output << readWordLowerCase(input);
 				while (findFirstNonSpaceCharacter(input))
 				{
-					output << (char)std::toupper(input.get());
+					output << static_cast<unsigned char>(std::toupper(input.get()));
 					output << readWordLowerCase(input);
 				}
 			}
@@ -116,7 +116,7 @@ namespace uio
 		std::string result = toCamelCase(value);
 		if (!result.empty())
 		{
-			result[0] = (char)std::toupper(result[0]);
+			result[0] = (unsigned char)std::toupper(result[0]);
 		}
 		return result;
 	}
@@ -125,7 +125,7 @@ namespace uio
 	{
 		while (!stream.eof())
 		{
-			char c = stream.peek();
+			unsigned char c = stream.peek();
 			if (std::isspace(c))
 			{
 				stream.get();
@@ -138,7 +138,7 @@ namespace uio
 		return false;
 	}
 
-	bool UIOHelper::readNextCharacter(std::istream& stream, char expectedChar)
+	bool UIOHelper::readNextCharacter(std::istream& stream, unsigned char expectedChar)
 	{
 		while (!stream.eof() && stream.peek() != expectedChar)
 		{

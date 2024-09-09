@@ -7,12 +7,12 @@ namespace uio
 {
 	static void writeValue(std::ostream& stream, const UItem& value, const XmlSettings& settings, int& indentLevel, const std::string& key = "");
 
-	const std::map<char, std::string> g_escapes = { {'<', "&lt;"},{'>',"&gt;"},{'&', "&amp;"},{'\'', "&apos;"}, {'\"', "&quot;"} };
+	const std::map<unsigned char, std::string> g_escapes = { {'<', "&lt;"},{'>',"&gt;"},{'&', "&amp;"},{'\'', "&apos;"}, {'\"', "&quot;"} };
 
 	static std::string getSafeXmlValue(const std::string& value)
 	{
 		std::ostringstream s;
-		for (char c : value)
+		for (unsigned char c : value)
 		{
 			if (g_escapes.find(c) != g_escapes.end())
 			{
@@ -20,7 +20,7 @@ namespace uio
 			}
 			else
 			{
-				if (c>31 && c< 127)
+				if (c>31 && c< 256)
 				{
 					s << c;
 				}
@@ -36,7 +36,7 @@ namespace uio
 	static std::string getAlphaNumSafeXmlValue(const std::string& value)
 	{
 		std::ostringstream s;
-		for (char c : value)
+		for (unsigned char c : value)
 		{
 			if (g_escapes.find(c) != g_escapes.end())
 			{

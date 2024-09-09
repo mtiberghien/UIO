@@ -1,0 +1,17 @@
+<Schoolÿ xmlns:uio="urn:uio:schema" uio:name="school">
+  <Notesÿ uio:key="notes">
+    <Int>12</Int>
+    <String>16</String>
+    <Object note="15.4"/>
+    <Int>20</Int>
+    <Int>18</Int>
+  </Notesÿ>
+  <Studentsÿ uio:key="students">
+    <Studentÿ uio:name="student" age="16" name="Frédéric Jamard"/>
+    <Studentÿ uio:name="student" age="15" name="John Charte"/>
+  </Studentsÿ>
+  <Teachersÿ uio:key="teachers">
+    <Teacherÿ uio:name="teacher" name="Thierry Delcourt" subject="Mathematics"/>
+    <Teacherÿ uio:name="teacher" name="Bernard Artman" subject="French"/>
+  </Teachersÿ>
+</Schoolÿ>

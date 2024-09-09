@@ -1,0 +1,34 @@
+{
+    "notes": 
+    [
+        12, 
+        "16", 
+        {
+            "note": 15.4
+        }, 
+        20, 
+        18
+    ], 
+    "students": 
+    [
+        {
+            "age": 16, 
+            "name": "Frédéric Jamard"
+        }, 
+        {
+            "age": 15, 
+            "name": "John Charte"
+        }
+    ], 
+    "teachers": 
+    [
+        {
+            "name": "Thierry Delcourt", 
+            "subject": "Mathematics"
+        }, 
+        {
+            "name": "Bernard Artman", 
+            "subject": "French"
+        }
+    ]
+}

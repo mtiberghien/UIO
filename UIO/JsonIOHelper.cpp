@@ -6,7 +6,7 @@
 
 namespace uio
 {
-	const std::map<std::string, char> g_escapes_read = { {"\\r", '\r'} , {"\\n", '\n'}, {"\\t", '\t' }, { "\\f", '\f' }, { "\\v", '\v' } };
+	const std::map<std::string, unsigned char> g_escapes_read = { {"\\r", '\r'} , {"\\n", '\n'}, {"\\t", '\t' }, { "\\f", '\f' }, { "\\v", '\v' } };
 
 
 
@@ -32,11 +32,11 @@ namespace uio
 		{
 			while (!stream.eof() && stream.peek() != '"')
 			{
-				char c = (char)stream.get();
+				unsigned char c = stream.get();
 				if (c == '\\')
 				{
 					std::ostringstream skey;
-					skey << c << (char)stream.peek();
+					skey << c << static_cast<unsigned char>(stream.peek());
 					std::string key = skey.str();
 					if (g_escapes_read.find(key) != g_escapes_read.end())
 					{
@@ -86,13 +86,13 @@ namespace uio
 	bool JsonIOHelper::readNonStringPrimitive(std::istream& stream, double& result, E_UType& type)
 	{
 		std::ostringstream s;
-		char c;
+		unsigned char c;
 		while (!stream.eof())
 		{
 			c = stream.peek();
 			if (!std::isspace(c) && c != '}' && c != ']' && c != ',')
 			{
-				s << (char)stream.get();
+				s << static_cast<unsigned char>(stream.get());
 			}
 			else
 			{

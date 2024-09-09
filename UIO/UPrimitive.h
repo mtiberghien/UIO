@@ -5,9 +5,6 @@
 #include "UIO.h"
 #include "UObject.h"
 #include "UArray.h"
-#include <limits>
-#include <iomanip>
-#include <sstream>
 
 namespace uio
 {
