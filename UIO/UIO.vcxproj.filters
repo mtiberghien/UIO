@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Serializers\Xml">
       <UniqueIdentifier>{7d5ac674-eba2-4ab6-bf6f-735f86f798c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Serializers\Ini">
+      <UniqueIdentifier>{560286a2-e608-4a44-969e-3e854392e27e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Serializers\Ini">
+      <UniqueIdentifier>{f5c9d59f-d677-4c58-b8d5-06a6cfe5a187}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -102,6 +108,15 @@
     <ClInclude Include="UIOHelper.h">
       <Filter>Header Files\Serializers</Filter>
     </ClInclude>
+    <ClInclude Include="IniSerializer.h">
+      <Filter>Header Files\Serializers\Ini</Filter>
+    </ClInclude>
+    <ClInclude Include="IniWriter.h">
+      <Filter>Header Files\Serializers\Ini</Filter>
+    </ClInclude>
+    <ClInclude Include="IniReader.h">
+      <Filter>Header Files\Serializers\Ini</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -154,6 +169,15 @@
     </ClCompile>
     <ClCompile Include="UIOHelper.cpp">
       <Filter>Source Files\Serializers</Filter>
+    </ClCompile>
+    <ClCompile Include="IniSerializer.cpp">
+      <Filter>Source Files\Serializers\Ini</Filter>
+    </ClCompile>
+    <ClCompile Include="IniWriter.cpp">
+      <Filter>Source Files\Serializers\Ini</Filter>
+    </ClCompile>
+    <ClCompile Include="IniReader.cpp">
+      <Filter>Source Files\Serializers\Ini</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

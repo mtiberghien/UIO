@@ -141,6 +141,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="IniReader.h" />
+    <ClInclude Include="IniSerializer.h" />
+    <ClInclude Include="IniWriter.h" />
     <ClInclude Include="JsonReader.h" />
     <ClInclude Include="IUContainer.h" />
     <ClInclude Include="IUSerializable.h" />
@@ -163,6 +166,9 @@
     <ClInclude Include="XmlWriter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IniReader.cpp" />
+    <ClCompile Include="IniSerializer.cpp" />
+    <ClCompile Include="IniWriter.cpp" />
     <ClCompile Include="JsonReader.cpp" />
     <ClCompile Include="IUContainer.cpp" />
     <ClCompile Include="IUSerializable.cpp" />

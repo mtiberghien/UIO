@@ -11,8 +11,8 @@ namespace uio
 	{
 	public:
 		virtual ~UXmlSerializable() {}
-		std::string serialize();
-		bool serialize(std::ostream& stream);
+		std::string serialize(const XmlSettings& settings = {});
+		bool serialize(std::ostream& stream, const XmlSettings& settings = {});
 		bool deserialize(std::istream& stream);
 		bool deserialize(std::string& string);
 	};
@@ -24,8 +24,8 @@ namespace uio
 		static std::string serialize(const UItem& object, const XmlSettings& settings = {});
 		static bool serialize(std::ostream& stream, const IUSerializable& object, const XmlSettings& settings = {});
 		static bool serialize(std::ostream& stream, const UItem& item, const XmlSettings& settings = {});
-		static bool deserialize(const std::string& json, IUSerializable& object);
-		static bool deserialize(const std::string& json, UItem& object);
+		static bool deserialize(const std::string& xml, IUSerializable& object);
+		static bool deserialize(const std::string& xml, UItem& object);
 		static bool deserialize(std::istream& stream, IUSerializable& object);
 		static bool deserialize(std::istream& stream, UItem& object);
 	};

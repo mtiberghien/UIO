@@ -84,16 +84,16 @@ namespace uio
 		return XmlReader::readItem(stream, object);
 	}
 
-	std::string UXmlSerializable::serialize()
+	std::string UXmlSerializable::serialize(const XmlSettings& settings)
 	{
 		std::ostringstream s;
-		serialize(s);
+		serialize(s, settings);
 		return s.str();
 	}
 
-	bool UXmlSerializable::serialize(std::ostream& stream)
+	bool UXmlSerializable::serialize(std::ostream& stream, const XmlSettings& settings)
 	{
-		return XmlSerializer::serialize(stream, *this);
+		return XmlSerializer::serialize(stream, *this, settings);
 	}
 
 	bool UXmlSerializable::deserialize(std::istream& stream)
