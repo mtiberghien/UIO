@@ -11,12 +11,13 @@ namespace uio
 
 	UObject& UObject::operator=(const UObject& object)
 	{
+		UObject o = object;
 		clear();
-		for (const auto& it : object.m_properties)
+		for (const auto& it : o.m_properties)
 		{
 			this->operator [](it.first) = it.second;
 		}
-		this->setName(object.getName());
+		this->setName(o.getName());
 		return *this;
 	}
 

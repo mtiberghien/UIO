@@ -36,22 +36,22 @@ namespace uio
 		return false;
 	}
 
-	bool IniSerializer::deserialize(const std::string& ini, IUSerializable& object)
+	bool IniSerializer::deserialize(const std::string& ini, IUSerializable& object, const IniReaderSettings& settings)
 	{
 		std::istringstream s{ ini };
-		return deserialize(s, object);
+		return deserialize(s, object, settings);
 	}
 
-	bool IniSerializer::deserialize(const std::string& ini, UItem& object)
+	bool IniSerializer::deserialize(const std::string& ini, UObject& object, const IniReaderSettings& settings)
 	{
 		std::istringstream s{ ini };
-		return deserialize(s, object);
+		return deserialize(s, object, settings);
 	}
 
-	bool IniSerializer::deserialize(std::istream& stream, IUSerializable& object)
+	bool IniSerializer::deserialize(std::istream& stream, IUSerializable& object, const IniReaderSettings& settings)
 	{
 		UObject o;
-		if (deserialize(stream, o))
+		if (deserialize(stream, o, settings))
 		{
 			object.fromObject(o);
 			return true;
@@ -59,8 +59,8 @@ namespace uio
 		return false;
 	}
 
-	bool IniSerializer::deserialize(std::istream& stream, UItem& object)
+	bool IniSerializer::deserialize(std::istream& stream, UObject& object, const IniReaderSettings& settings)
 	{
-		return IniReader::readItem(stream, object);
+		return IniReader::readObject(stream, object, settings);
 	}
 }

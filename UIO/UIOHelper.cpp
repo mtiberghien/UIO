@@ -2,6 +2,7 @@
 #include "UIOHelper.h"
 #include "IUValue.h"
 #include <algorithm>
+#include "UValue.h"
 
 namespace uio
 {
@@ -73,13 +74,13 @@ namespace uio
 		std::ostringstream s;
 		while (!stream.eof())
 		{
-			unsigned char c = stream.peek();
+			char c = stream.peek();
 			if (!std::isspace(c))
 			{
 				c = stream.get();
 				if (std::isalnum(c))
 				{
-					s << static_cast<unsigned char>(std::tolower(c));
+					s << static_cast<char>(std::tolower(c));
 				}
 			}
 			else
@@ -157,5 +158,44 @@ namespace uio
 		std::string result{ value };
 		std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c) {return std::tolower(c); });
 		return result;
+	}
+
+    void UIOHelper::setValue(UValue& uValue, const std::string& sValue, E_UType desiredType)
+	{
+		E_UType t;
+		double d;
+		if (UIOHelper::tryGetNumber(sValue, d, t))
+		{
+			if (desiredType != E_UType::Undefined)
+			{
+				t = desiredType;
+			}
+			switch (t)
+			{
+			case E_UType::Bool: uValue = d == (double)1; break;
+			case E_UType::Short: uValue = (short)d; break;
+			case E_UType::Int: uValue = (int)d; break;
+			case E_UType::Float: uValue = (float)d; break;
+			case E_UType::String: uValue = sValue; break;
+			default: uValue = d; break;
+			}
+		}
+		else if (UIOHelper::iequals(sValue, "null"))
+		{
+			uValue = nullptr;
+		}
+		else
+		{
+			bool b_true = UIOHelper::iequals(sValue, "true");
+			if (b_true || UIOHelper::iequals(sValue, "false"))
+			{
+				uValue = b_true;
+			}
+			else
+			{
+				uValue = sValue;
+			}
+		}
+
 	}
 }

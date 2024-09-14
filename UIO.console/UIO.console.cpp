@@ -3,6 +3,7 @@
 #include "UIO_All.h"
 #include "JsonSerializer.h"
 #include "XmlSerializer.h"
+#include "IniSerializer.h"
 #include <iostream>
 #include <fstream>
 #include <io.h>
@@ -226,6 +227,7 @@ void setValue(UValue& v)
     v = value;
 }
 
+#include <Windows.h>
 
 int main()
 {
@@ -358,7 +360,17 @@ int main()
     XmlSerializer::deserialize(xmlString, xmlObject);
     XmlSerializer::serialize(std::cout, xmlObject);
     JsonSerializer::serialize(std::cout, xmlObject, true);
+    std::string iniString = IniSerializer::serialize(xmlObject);
 
+    IniSerializer::serialize(std::cout, xmlObject);
+    std::fstream fIni{ "Test.ini" };
+    IniSerializer::serialize(fIni, xmlObject);
+    UObject iniObject;
+    IniSerializer::deserialize(iniString, iniObject, true);
+    XmlSerializer::serialize(std::cout, iniObject, true);
+    char iniValue[100];
+    GetPrivateProfileStringA("school.notes.2", "note", "default", iniValue, 100, R"(C:\Users\Mathias\Documents\dev\cpp\UIO\UIO.console\Test.ini)");
+    std::cout << "school.notes.2: " << iniValue;
     
     //std::getchar();
 }

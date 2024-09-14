@@ -213,44 +213,7 @@ namespace uio
 		return false;
 	}
 
-	static void setValue(UValue& uValue, const std::string& sValue, E_UType desiredType = E_UType::Undefined)
-	{
-		E_UType t;
-		double d;
-		if (UIOHelper::tryGetNumber(sValue, d, t))
-		{
-			if (desiredType != E_UType::Undefined)
-			{
-				t = desiredType;
-			}
-			switch (t)
-			{
-			case E_UType::Bool: uValue = d == (double)1; break;
-			case E_UType::Short: uValue = (short)d; break;
-			case E_UType::Int: uValue = (int)d; break;
-			case E_UType::Float: uValue = (float)d; break;
-			case E_UType::String: uValue = sValue; break;
-			default: uValue = d; break;
-			}
-		}
-		else if (UIOHelper::iequals(sValue, "null"))
-		{
-			uValue = nullptr;
-		}
-		else
-		{
-			bool b_true = UIOHelper::iequals(sValue, "true");
-			if (b_true || UIOHelper::iequals(sValue, "false"))
-			{
-				uValue = b_true;
-			}
-			else
-			{
-				uValue = sValue;
-			}
-		}
-		
-	}
+	
 
 	static bool readAttributes(std::istream& stream, UItem& item, bool& hasChildren, std::string& key)
 	{
@@ -289,7 +252,7 @@ namespace uio
 				{
 					if (isAttribute)
 					{
-						setValue(item[attributeKey], value);
+						UIOHelper::setValue(item[attributeKey], value);
 					}
 					if (isUIOName)
 					{
@@ -398,7 +361,7 @@ namespace uio
 							std::string value = getValueContent(stream);
 							if (item.isUndefined())
 							{
-								setValue((UValue&)item, value, fromString(elementName));
+								UIOHelper::setValue((UValue&)item, value, fromString(elementName));
 								return !getFirstBeginMarkup(stream, foundType) && foundType == E_MarkupType::EndMarkup && getElementName(stream) == elementName && UIOHelper::readNextCharacter(stream, '>');
 
 							}

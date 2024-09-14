@@ -28,5 +28,6 @@ namespace uio
 		static std::string toCamelCase(const std::string& value);
 		static std::string toPascalCase(const std::string& value);
 		static std::string toLower(const std::string& value);
+		static void setValue(UValue& uValue, const std::string& sValue, E_UType desiredType = E_UType::Undefined);
 	};
 }

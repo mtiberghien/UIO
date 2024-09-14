@@ -52,8 +52,9 @@ namespace uio
 
 	UArray& UArray::operator=(const UArray& array)
 	{
+		UArray a = array;
 		clear();
-		for (const auto& it : array.m_items)
+		for (const auto& it : a.m_items)
 		{
 			m_items.push_back(it);
 		}
