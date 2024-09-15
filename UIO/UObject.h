@@ -28,7 +28,7 @@ namespace uio
 		UObject& getObject() override { return *this; }
 		UArray& getArray() override;
 		const UObject& getObject() const override { return *this; };
-		const UArray& getArray() const override; 
+		const UArray& getArray() const override;
 		virtual UValue& operator[](const std::string& key) override;
 		const UValue& operator[](const std::string& key) const override;
 		const UValue& operator[](int index) const override;
@@ -46,6 +46,9 @@ namespace uio
 		UValue& getOrError(const std::string& key) override;
 		const std::string& getName() const { return m_name; }
 		virtual void setName(const std::string& name) { m_name = name; }
+		bool erase(const std::string& key) override;
+		bool eraseAt(int index) override;
+
 	private:
 		std::string m_name{ "" };
 		std::map<std::string, UValue> m_properties;

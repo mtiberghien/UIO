@@ -18,6 +18,29 @@ namespace uio
 		return UUndefinedProvider::getError();
 	}
 
+	bool UArray::eraseAt(int index)
+	{
+		if (index >= 0 && index < m_items.size())
+		{
+			auto it = m_items.begin();
+			std::advance(it, index);
+			m_items.erase(it);
+			return true;
+		}
+		return false;
+	}
+
+	bool UArray::erase(const std::string& key)
+	{
+		double i;
+		E_UType t;
+		if (UIOHelper::tryGetNumber(key, i, t))
+		{
+			return eraseAt((int)i);
+		}
+		return false;
+	}
+
 	UValue& UArray::getOrError(const std::string& key) {
 		return this->operator[](key);
 	}

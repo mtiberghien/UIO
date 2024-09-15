@@ -1,41 +1,54 @@
 # Introduction
-This is a IO helper library library created for a project that couldn' use a more recent version than VS2013. Based on standard library it uses c++ 11.
+This is a IO helper library created for a project that couldn' use a more recent version than VS2013. Based on standard library it uses c++ 11.
 It uses the standard library but was created to be used as a dll in Windows environment.
 The purpose of this project is to have an intuitive object abstraction that allows reflexion to be able to create different serializers. The core library, developed in modern c++ defines inspectable objects that doesn't throw exception and optimizes memory usage.
-A first implementation use json serialization.
+``JsonSerializer``, ``XmlSerializer`` and ``IniSerializer`` have been implemented to support transition from and to theses formats to and from `UObject`.
+
+<u><b>Note:</b></u> The serializers are very simple, support only ASCII encoding and have room for improvement.
 # Installation
 <u><b>Note:</b></u> The library was developped for a windows usage but has no other dependency to windows library than `__declspec` defined in ``UIO.h``.
 1. Compile UIO project that will produce UIO.lib and UIO.dll
-1. In your c++ project, ensure to include all required header files:
-    - IUContainer.h
-    - IUValue.h
-    - UArray.h
-    - UObject.h
-    - UPrimitive.h
-    - UIO_All.h
-    - UIO.h
-    - JsonIOHelper.h
-    - UItem.h
-    - UValue.h
-    - UUndefined.h
-    - IUSerializable.h
-    - UIOHelper.h
-    - JsonSerializer.h
-    - JsonReader.h
-    - JsonWriter.h
-    - XmlSerializer.h
-    - XmlReader.h
-    - XmlWriter.h
+1. In your c++ project, ensure to include a folder path that contains all required header files:
+
+    - Core headers:
+        - IUContainer.h
+        - IUValue.h
+        - UArray.h
+        - UObject.h
+        - UPrimitive.h
+        - UIO.h
+        - UIOHelper.h
+        - UItem.h
+        - UValue.h
+        - UUndefined.h
+        - IUSerializable.h
+    - Serialization headers:
+        - UIOHelper.h
+        - JsonIOHelper.h
+        - JsonSerializer.h
+        - JsonReader.h
+        - JsonWriter.h
+        - XmlSerializer.h
+        - XmlReader.h
+        - XmlWriter.h
+        - IniSerializer.h
+        - IniReader.h
+        - IniWriter.h
+
+You can use ``UIO_All.h`` in your project to include all core header at once.
+
 1. In your c++ project, ensure to link to ``UIO.lib``
-1. In your c++ code, just include `UIO_All.h` file that includes all you need. You might want to use namespace json to simplify the code
+1. In your c++ code, just include `UIO_All.h` file that includes all you need. You might want to use namespace ``uio`` to simplify the code
+1. Include any `xxxSerializer.h` depending on which format you want to use
 1. At runtime, your application will need ``UIO.dll``
 
 # Usage
-The interface `IUSerializable` is dedicated to define `readObject` and `writeObject` method which is implemented by the model classes to map each property to a common object: `UObject` which is a dictionary mapping keys to `UValue` object.
-A `UValue` can be one of `UArray`, `UObject` or a `UPrimitive` which supports boolean, short, int, float, double, std::string and const char* primitives.
+The interface `IUSerializable` is dedicated to define `readObject` and `writeObject` method which is implemented by the model classes to map each property to a common object: `UObject` which is a dictionary mapping ``string`` keys to `UValue` instances.
+A `UValue` can be one of `UArray`, `UObject` or a `UPrimitive` which supports boolean, short, int, float, double, std::string, const char* and nullptr_t primitives.
 ## IUSerializable
 ```cpp
 #include "UIO_All.h"
+#include "JsonSerializer.h"
 
 using namespace uio;
 
@@ -151,19 +164,25 @@ int main()
 ```
 
 ## UObject
-A `UObject` can be initialized with a json string or filled using operator []; The type of JsonValue is inferred from the primitive type or can be a `UObject` or a `UArray`.
-Note that a copy is used when adding an object or an array. They should be filled to be added to the parent object.
-A `UObject` can be written to or read from a string or a stream.
-If one tries to access an index that does not exist or find a property that does not exist, a reference to an Undefined value is returned which will always return the default value. This is to avoid controls at runtime.
-getInt on an object or an array will return the size of the object (number of properties) or array (number of items).
+A `UObject` can be initialized with a list of ``string``/``UValue`` pair or filled, key after key using operator []; The type of ``UValue`` is inferred from the primitive type or can be an `UObject` or an `UArray`.
+Note that a deep copy is used when adding an object or an array. They should be filled prior to be added to the parent object.
 
-<u><b>Note:</b></u>The Undefined value will be in an error state and cannot be assigned. If you try to set a JsonValue in another object or array, the new value will be an Undefined value.
+A `UObject` can be written to or read from a string or a stream.
+
+A `UObject` can store a name property that will allow to combine specific name with factory (in case of storage of collection of inherited objects by example).
+
+If one tries to access an index that does not exist or find a property that does not exist, a reference to an Undefined value is returned which will always return the default value. This is to avoid controls at runtime.
+
+<u><b>Note:</b></u> The Undefined value will be in an error state and cannot be assigned. If you try to set a ``UValue`` in another object or array, the new value will be an Undefined value.
+
+Calling ``getInt`` method on an object or an array will return the size of the object (number of properties) or array (number of items).
 
 An object property can be accessed using an index but user should be aware that the index order depends on the alphabetical order of properties.
 An array item can be accessed with a string if it can be parsed as a valid index of the array.
 
 ```cpp
 #include "UIO_All.h"
+#include "JsonSerializer.h"
 #include <iostream>
 
 using namespace uio;
@@ -189,7 +208,7 @@ int main()
     JsonSerializer::serialize(std::cout, o, true);
     std::cout << "ids[0]: " << o["ids"][0].getString() << std::endl;
 	std::cout << "o[0][\"0\"]: ";
-	JsonSerializer::serialize(std::cout, o[0]["0"]);
+	JsonSerializer::serialize(std::cout, o[0]["0"], false);
 	std::cout << std::endl;
     std::cout << "isOk: " << (std::string)o["isOk"] << std::endl;
     std::cout << "values: " << o["values"].getString() << std::endl;
@@ -259,6 +278,6 @@ Here bellow the availables methods on core interfaces:
 
 ![Alt Image Text](./resources/interfaces_details.png)
 
-Here is an exemple of serialization architecture with Json serializaztion:
+Here is an example of serialization architecture with Json, Xml and Ini serializaztion:
 
 ![Alt Image Text](./resources/serialization_architecture.png)

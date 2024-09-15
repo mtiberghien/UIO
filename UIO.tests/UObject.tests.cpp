@@ -14,13 +14,13 @@ namespace UIOTests
 	{
 	public:
 		
-		TEST_METHOD(JObjectIsEmpty)
+		TEST_METHOD(UObjectIsEmpty)
 		{
 			UObject o;
 			Assert::IsTrue(o.isEmpty(), L"o doit etre vide");
 		}
 
-		TEST_METHOD(JObjectAddBool)
+		TEST_METHOD(UObjectAddBool)
 		{
 			UObject o;
 			o["b"] = true;
@@ -35,7 +35,7 @@ namespace UIOTests
 			Assert::IsFalse(o["b2"].getBool());
 		}
 
-		TEST_METHOD(JObjectAddShort)
+		TEST_METHOD(UObjectAddShort)
 		{
 			UObject o;
 			o["s"] = (short)10;
@@ -47,7 +47,7 @@ namespace UIOTests
 			Assert::AreEqual((short)10, o["s"].getShort());
 		}
 
-		TEST_METHOD(JObjectAddInt)
+		TEST_METHOD(UObjectAddInt)
 		{
 			UObject o;
 			o["i"] = 33000;
@@ -59,7 +59,7 @@ namespace UIOTests
 			Assert::AreEqual(33000, o["i"].getInt());
 		}
 
-		TEST_METHOD(JObjectAddFloat)
+		TEST_METHOD(UObjectAddFloat)
 		{
 			UObject o;
 			o["f"] = (float)3.14;
@@ -71,7 +71,7 @@ namespace UIOTests
 			Assert::AreEqual((float)3.14, o["f"].getFloat());
 		}
 
-		TEST_METHOD(JObjectAddDouble)
+		TEST_METHOD(UObjectAddDouble)
 		{
 			UObject o;
 			o["d"] = 3.141592653;
@@ -83,7 +83,7 @@ namespace UIOTests
 			Assert::AreEqual(3.141592653, o["d"].getDouble());
 		}
 
-		TEST_METHOD(JObjectAddString)
+		TEST_METHOD(UObjectAddString)
 		{
 			UObject o;
 			o["st"] = "Test";
@@ -99,7 +99,7 @@ namespace UIOTests
 			Assert::AreEqual(std::string{"Test"}, o["st"].getString());
 		}
 
-		TEST_METHOD(JObjectAddObject)
+		TEST_METHOD(UObjectAddObject)
 		{
 			UObject o;
 			UObject o2;
@@ -113,7 +113,7 @@ namespace UIOTests
 			Assert::AreEqual(std::string{ "Test" }, o["o"]["s"].getString());
 		}
 
-		TEST_METHOD(JObjectAddArray)
+		TEST_METHOD(UObjectAddArray)
 		{
 			UObject o;
 			UArray a;
@@ -134,7 +134,7 @@ namespace UIOTests
 			}
 		}
 
-		TEST_METHOD(JObjectAddNull)
+		TEST_METHOD(UObjectAddNull)
 		{
 			UObject o;
 			o["n"] = nullptr;
@@ -147,7 +147,7 @@ namespace UIOTests
 			Assert::AreEqual(std::string{ "null" }, o["n"].getString());
 		}
 
-		TEST_METHOD(JObjectReadString)
+		TEST_METHOD(UObjectReadString)
 		{
 			std::string json{ R"({"b": true, "s": 1, "i": 33000, "f": 3.14, "d": 3.141592653, "st": "Test", "n": null, "o": {"s": "Test"}, "a": [1, 2, 3]})" };
 			UObject o;
@@ -178,7 +178,7 @@ namespace UIOTests
 			}
 		}
 
-		TEST_METHOD(JObjectEquality)
+		TEST_METHOD(UObjectEquality)
 		{
 			UValue v = UObject{ { "id", 1 }, { "value", "test" } };
 			UValue v2 = UObject{ { "id", 1 }, { "value", "test" } };
@@ -188,7 +188,7 @@ namespace UIOTests
 			Assert::IsTrue(v == v2);
 		}
 
-		TEST_METHOD(JObjectGetString)
+		TEST_METHOD(UObjectGetString)
 		{
 			std::string json{ R"({"a": true, "b": 1, "c": 33000, "d": 3.14, "e": 3.141592653, "f": "Test", "g": {"h": "Test"}, "i": [1, 2, 3], "j": null})" };
 			UObject o;
@@ -197,7 +197,7 @@ namespace UIOTests
 			Assert::AreEqual(std::string{"Object{a: Bool, b: Short, c: Int, d: Double, e: Double, f: String, g: Object, i: Array, j: Null}"}, o.getString());
 		}
 
-		TEST_METHOD(JObjectWrite)
+		TEST_METHOD(UObjectWrite)
 		{
 			std::string json{ R"({"a": true, "b": 1, "c": 33000, "d": 3.14, "e": 3.141592653, "f": "Test", "g": {"h": "Test"}, "i": [1, 2, 3], "j": null})" };
 			std::string json2{ R"({
@@ -231,7 +231,7 @@ namespace UIOTests
 			Assert::AreEqual(json2, s2.str());
 		}
 
-		TEST_METHOD(JObjectFind)
+		TEST_METHOD(UObjectFind)
 		{
 			std::string json{ R"({"b": true, "s": 1, "i": 33000, "f": 3.14, "d": 3.141592653, "st": "Test", "o": {"s": "Test"}, "a": [1, {"value": 2}, 3]})" };
 			UObject o;
@@ -246,7 +246,7 @@ namespace UIOTests
 			Assert::IsTrue(v2.isError());
 		}
 
-		TEST_METHOD(JObjectInit)
+		TEST_METHOD(UObjectInit)
 		{
 			UObject o{ {"a",1},{"b", false}, {"c", UArray{1,"2", nullptr}} };
 			Assert::AreEqual(3, (int)o.size());
@@ -259,7 +259,7 @@ namespace UIOTests
 			Assert::IsTrue(v == o);
 		}
 
-		TEST_METHOD(JObjectReadError)
+		TEST_METHOD(UObjectReadError)
 		{
 			UObject o;
 			
@@ -273,6 +273,28 @@ namespace UIOTests
 			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":[1,2,3}})", o));
 			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":[1,2 3])", o)); 
 			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":1,2, 3]})", o));
+		}
+
+		TEST_METHOD(UObjectErase)
+		{
+			UObject o{ {"a", 1},{"b",2},{"c",3} };
+			Assert::IsTrue(o.erase("b"));
+			Assert::AreEqual(2, (int)o.size());
+			Assert::IsFalse(o.erase("b"));
+			Assert::IsTrue(o.eraseAt(0));
+			Assert::AreEqual(1, (int)o.size());
+			Assert::IsFalse(o.eraseAt(2));
+			Assert::AreEqual(3, o[0].getInt());
+		}
+
+		TEST_METHOD(AffectFromInnerElement)
+		{
+			UObject o{ {"o", UObject{{"a",1},{"b",2}}} };
+			UObject& oRef = o;
+			oRef = oRef["o"];
+			Assert::AreEqual(2, (int)oRef.size());
+			Assert::AreEqual(1, oRef["a"].getInt());
+			Assert::AreEqual(2, oRef["b"].getInt());
 		}
 	};
 }

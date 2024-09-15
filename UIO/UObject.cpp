@@ -58,6 +58,23 @@ namespace uio
 		return UUndefinedProvider::getError();
 	}
 
+	bool UObject::erase(const std::string& key)
+	{
+		return m_properties.erase(key) == 1;
+	}
+
+	bool UObject::eraseAt(int index)
+	{
+		if (index >= 0 && index < m_properties.size())
+		{
+			auto it = m_properties.begin();
+			std::advance(it, index);
+			m_properties.erase(it);
+			return true;
+		}
+		return false;
+	}
+
 	const UValue& UObject::operator[](int index) const
 	{
 		if (index >= 0 && (unsigned int)index < m_properties.size())

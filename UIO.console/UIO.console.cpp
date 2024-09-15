@@ -359,7 +359,11 @@ int main()
     std::cout << xmlString << std::endl;
     XmlSerializer::deserialize(xmlString, xmlObject);
     XmlSerializer::serialize(std::cout, xmlObject);
-    JsonSerializer::serialize(std::cout, xmlObject, true);
+    std::string xmlJsonString = JsonSerializer::serialize(xmlObject, true);
+    std::cout << xmlJsonString;
+    UObject xmlJsonObject;
+    JsonSerializer::deserialize(xmlJsonString, xmlJsonObject);
+    XmlSerializer::serialize(std::cout, xmlJsonObject);
     std::string iniString = IniSerializer::serialize(xmlObject);
 
     IniSerializer::serialize(std::cout, xmlObject);

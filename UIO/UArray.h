@@ -46,6 +46,8 @@ namespace uio
 		std::vector<UValue>::iterator end() { return m_items.end(); }
 		bool operator==(const IUValue& other) const;
 		UValue& getOrError(const std::string& key) override;
+		bool eraseAt(int index) override;
+		bool erase(const std::string& key) override;
 	private:
 		std::vector<UValue> m_items;
 	};
