@@ -193,7 +193,7 @@ namespace uio
 
 	static bool objectify(UObject& object)
 	{
-		bool result = false;
+		std::vector<std::string> toRemove;
 		for (auto& kvp : object)
 		{
 			if (kvp.second.isObject())
@@ -208,7 +208,7 @@ namespace uio
 						E_UType t;
 						if (getReference(v.getString(), name, path, t) && UIOHelper::iequals(path, kvp.first))
 						{
-							result = true;
+							toRemove.push_back(kvp.first);
 							if (t == E_UType::Array)
 							{
 								UArray a;
@@ -232,7 +232,15 @@ namespace uio
 				}
 			}
 		}
-		return result;
+		for (const std::string& key : toRemove)
+		{
+			object.erase(key);
+		}
+		if (object.size() == (size_t)1)
+		{
+			object = object[0];
+		}
+		return !toRemove.empty();
 	}
 
 	bool IniReader::readObject(std::istream& stream, UObject& object, const IniReaderSettings& settings)
@@ -243,9 +251,9 @@ namespace uio
 		{
 			return false;
 		}
-		if (settings.getObjectify() && objectify(object))
+		if (settings.getObjectify())
 		{
-			object = object[0];
+			objectify(object);
 		}
 		
 	}
