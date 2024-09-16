@@ -130,12 +130,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="example.cpp" />
     <ClCompile Include="UIO.console.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UIO\UIO.vcxproj">
       <Project>{db0e78e8-e450-478e-bcc1-4f8969f6eed5}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="example.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

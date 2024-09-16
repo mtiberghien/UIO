@@ -8,6 +8,8 @@
 #include <fstream>
 #include <io.h>
 #include <fcntl.h>
+#include "example.h"
+#include "Windows.h"
 
 using namespace uio;
 
@@ -227,7 +229,31 @@ void setValue(UValue& v)
     v = value;
 }
 
-#include <Windows.h>
+static void Example()
+{
+    Flotte f;
+    MachineC c{"Machine C", 10};
+    MachineD d{ "Machine D", true };
+    f.push_back(std::make_unique<VehiculeA>("Véhicule A"));
+    f[0]->push_back(std::make_unique<MachineC>(c));
+    f.push_back(std::make_unique<VehiculeB>("Véhidule B"));
+    f[1]->push_back(std::make_unique<MachineD>(d));
+    std::string json = JsonSerializer::serialize(f, true);
+    std::cout << json;
+    Flotte f2;
+    JsonSerializer::deserialize(json, f2);
+    for (const auto& v : f2)
+    {
+        std::cout << "Véhicule: " << v->getName() << ", " << v->getType() << std::endl;
+        std::cout << "\tMachines: " << std::endl;
+        for (const auto& m : *v)
+        {
+            std::cout << "\t " << m->getName() << ", " << m->getType() << std::endl;
+        }
+    }
+    XmlSerializer::serialize(std::cout, f2);
+    IniSerializer::serialize(std::cout, f2);
+}
 
 int main()
 {
@@ -374,7 +400,7 @@ int main()
     XmlSerializer::serialize(std::cout, iniObject, true);
     char iniValue[100];
     GetPrivateProfileStringA("school.notes.2", "note", "default", iniValue, 100, R"(C:\Users\Mathias\Documents\dev\cpp\UIO\UIO.console\Test.ini)");
-    std::cout << "school.notes.2: " << iniValue;
-    
+    std::cout << "school.notes.2: " << iniValue << std::endl;
+    Example();
     //std::getchar();
 }
