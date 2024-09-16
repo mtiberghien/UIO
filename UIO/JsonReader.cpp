@@ -16,9 +16,33 @@ namespace uio
 
 	static bool readAttributeKey(std::istream& stream, std::string& key)
 	{
-		if (JsonIOHelper::readStringValue(stream, key))
+		if (UIOHelper::findFirstNonSpaceCharacter(stream))
 		{
-			return UIOHelper::readNextCharacter(stream, ':');
+			if ((char)stream.peek() == '"')
+			{
+				if (JsonIOHelper::readStringValue(stream, key))
+				{
+					return UIOHelper::readNextCharacter(stream, ':');
+				}
+			}
+			else
+			{
+				std::ostringstream s;
+				while (!stream.eof())
+				{
+					unsigned char c = stream.get();
+					if (c != ':')
+					{
+						s << c;
+					}
+					else
+					{
+						key = s.str();
+						key.erase(key.find_last_not_of(" \n\r\t") + 1);
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}

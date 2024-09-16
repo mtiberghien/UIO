@@ -262,16 +262,15 @@ namespace UIOTests
 		TEST_METHOD(UObjectReadError)
 		{
 			UObject o;
-			
+
 			Assert::IsFalse(JsonSerializer::deserialize("", o));
 			Assert::IsFalse(JsonSerializer::deserialize(R"("test":value)", o));
-			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":1")", o)); 
+			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":1")", o));
 			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":value})", o));
-			Assert::IsFalse(JsonSerializer::deserialize(R"({test:"value"})", o)); 
 			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":1 "test2":"deux"})", o));
 			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":1, "test2": 2,})", o));
 			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":[1,2,3}})", o));
-			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":[1,2 3])", o)); 
+			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":[1,2 3])", o));
 			Assert::IsFalse(JsonSerializer::deserialize(R"({"test":1,2, 3]})", o));
 		}
 

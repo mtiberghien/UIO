@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="IUSerializable.tests.cpp" />
+    <ClCompile Include="JsonSerializer.tests.cpp" />
     <ClCompile Include="UArray.tests.cpp" />
     <ClCompile Include="UObject.tests.cpp" />
     <ClCompile Include="UValue.tests.cpp" />
