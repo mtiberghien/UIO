@@ -77,20 +77,28 @@ namespace uio
 		array.clear();
 		if (UIOHelper::readNextCharacter(stream, '['))
 		{
-			bool hasNext = false;
-			bool isOk = false;
-			do
+			if (UIOHelper::findFirstNonSpaceCharacter(stream))
 			{
-				array.push_back({});
-				isOk = readValue(stream, array.back(), hasNext);
-			} while (isOk && hasNext);
-			if (!isOk)
-			{
-				return false;
-			}
-			if (UIOHelper::readNextCharacter(stream, ']'))
-			{
-				return true;
+				if (stream.peek() == ']')
+				{
+					stream.get();
+					return true;
+				}
+				bool hasNext = false;
+				bool isOk = false;
+				do
+				{
+					array.push_back({});
+					isOk = readValue(stream, array.back(), hasNext);
+				} while (isOk && hasNext);
+				if (!isOk)
+				{
+					return false;
+				}
+				if (UIOHelper::readNextCharacter(stream, ']'))
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -101,19 +109,27 @@ namespace uio
 		object.clear();
 		if (UIOHelper::readNextCharacter(stream, '{'))
 		{
-			bool hasNext = false;
-			bool isOk = false;
-			do
+			if (UIOHelper::findFirstNonSpaceCharacter(stream))
 			{
-				isOk = readProperty(object, stream, hasNext);
-			} while (isOk && hasNext);
-			if (!isOk)
-			{
-				return false;
-			}
-			if (UIOHelper::readNextCharacter(stream, '}'))
-			{
-				return true;
+				if (stream.peek() == '}')
+				{
+					stream.get();
+					return true;
+				}
+				bool hasNext = false;
+				bool isOk = false;
+				do
+				{
+					isOk = readProperty(object, stream, hasNext);
+				} while (isOk && hasNext);
+				if (!isOk)
+				{
+					return false;
+				}
+				if (UIOHelper::readNextCharacter(stream, '}'))
+				{
+					return true;
+				}
 			}
 		}
 		return false;

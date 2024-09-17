@@ -232,13 +232,13 @@ void setValue(UValue& v)
 static void Example()
 {
     Flotte f;
-    MachineC c{"Machine C", 10};
     MachineD d{ "Machine D", true };
-    f.push_back(std::make_unique<VehiculeA>("Véhicule A"));
-    f[0]->push_back(std::make_unique<MachineC>(c));
-    f.push_back(std::make_unique<VehiculeB>("Véhidule B"));
+    VehiculeA a{ "Véhicule A" };
+    std::string json = R"({"vehicules": [{"name": "Véhicule A", "uio:name" : "A", "machines" :[{"name": "Machine C", "uio:name": "C", "value": 10}}]}]})";
+    JsonSerializer::deserialize(json, f);
+    f.push_back(std::make_unique<VehiculeB>("Véhicule B"));
     f[1]->push_back(std::make_unique<MachineD>(d));
-    std::string json = JsonSerializer::serialize(f, true);
+    json = JsonSerializer::serialize(f, true);
     std::cout << json;
     Flotte f2;
     JsonSerializer::deserialize(json, f2);

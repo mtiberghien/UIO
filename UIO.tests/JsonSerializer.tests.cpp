@@ -23,6 +23,24 @@ namespace UIOTests
 			Assert::AreEqual(3, o["test2"].getInt());
 		}
 
+		TEST_METHOD(DeserializeEmptyArray)
+		{
+			std::string json = R"({"test":[], "name": "test"})";
+			UObject o;
+			Assert::IsTrue(JsonSerializer::deserialize(json, o));
+			Assert::AreEqual(2, o.getInt());
+			Assert::AreEqual(std::string{ "test" }, o["name"].getString());
+		}
+
+		TEST_METHOD(DeserializeEmptyObject)
+		{
+			std::string json = R"({"test":{}, "name": "test"})";
+			UObject o;
+			Assert::IsTrue(JsonSerializer::deserialize(json, o));
+			Assert::AreEqual(2, o.getInt());
+			Assert::AreEqual(std::string{ "test" }, o["name"].getString());
+		}
+
 
 	};
 }
