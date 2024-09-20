@@ -7,11 +7,11 @@
 
 namespace uio
 {
-	UValue::UValue(const UObject& ref) : m_ptr(new UObject(ref))
+	UValue::UValue(const UObject& ref) : m_ptr(std::make_unique<UObject>(ref))
 	{
 	}
-	UValue::UValue() :m_ptr(new UUndefined()) {}
-	UValue::UValue(const UArray& ref) : m_ptr(new UArray(ref))
+	UValue::UValue() :m_ptr(std::make_unique<UUndefined>()) {}
+	UValue::UValue(const UArray& ref) : m_ptr(std::make_unique<UArray>(ref))
 	{
 	}
 
