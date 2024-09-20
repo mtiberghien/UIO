@@ -10,6 +10,26 @@ using namespace uio;
 enum E_VehiculeType{ A, B};
 enum E_MachineType {C, D};
 
+static std::string toString(E_VehiculeType type)
+{
+	switch (type)
+	{
+	case E_VehiculeType::A: return "A";
+	case E_VehiculeType::B: return "B";
+	default: return "Inconnu";
+	}
+}
+
+static std::string toString(E_MachineType type)
+{
+	switch (type)
+	{
+	case E_MachineType::C: return "C";
+	case E_MachineType::D: return "D";
+	default: return "Inconnu";
+	}
+}
+
 class INamed
 {
 public:

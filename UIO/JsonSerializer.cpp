@@ -10,7 +10,6 @@ namespace uio
 
 	std::string JsonSerializer::serialize(const IUSerializable& object, const JsonSettings& settings)
 	{
-
 		std::ostringstream s;
 		if (serialize(s, object, settings))
 		{

@@ -99,7 +99,12 @@ namespace uio
 	std::string UObject::getString(const std::string& defaultValue) const
 	{
 		std::ostringstream s;
-		s << "Object{";
+		s << "Object";
+		if (!m_name.empty())
+		{
+			s << ":" << m_name;
+		}
+		s << "{";
 		for (auto it = begin(); it != end(); it++)
 		{
 			s << it->first << ": " << toString(it->second.getType());

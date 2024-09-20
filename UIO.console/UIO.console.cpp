@@ -239,26 +239,71 @@ static void Example()
     f[1].push_back(d);
     f[1].push_back(MachineC("MC", 5));
     json = JsonSerializer::serialize(f, true);
-    std::cout << json;
+    std::cout << "****Json****" << std::endl;
+    std::cout << json << std::endl;
     Flotte f2;
     JsonSerializer::deserialize(json, f2);
+    std::cout << "****Object****" << std::endl;
     for (const auto& v : f2)
     {
-        std::cout << "Véhicule: " << v.getName() << ", " << v.getType() << std::endl;
+        std::cout << "Véhicule: " << v.getName() << ", " << toString(v.getType()) << std::endl;
         std::cout << "\tMachines: " << std::endl;
         for (const auto& m : v)
         {
-            std::cout << "\t " << m.getName() << ", " << m.getType() << std::endl;
+            std::cout << "\t " << m.getName() << ", " << toString(m.getType()) << std::endl;
         }
     }
-    XmlSerializer::serialize(std::cout, f2);
-    IniSerializer::serialize(std::cout, f2);
+    std::cout << std::endl;
+
+    std::stringstream s;
+    XmlSerializer::serialize(s, f2);
+    Flotte f3;
+    std::cout << "****Xml****" << std::endl;
+    std::cout << s.str() << std::endl;
+    s.seekg(0);
+    XmlSerializer::deserialize(s, f3);
+    std::cout << "****Ini****" << std::endl;
+    IniSerializer::serialize(std::cout, f3);
 }
 
-int main()
+static void School()
 {
-    setlocale(LC_ALL, "en-US");
-   E_UType types[] = { E_UType::Bool, E_UType::Short, E_UType::Int, E_UType::Float, E_UType::Double, E_UType::String };
+    UObject school{ {"teachers", E_UType::Array}, {"students", E_UType::Array} };
+    school.setName("school");
+    school["students"].getArray() << UObject{ {"name", "Frédéric Jamard"},{"age", 16} } << UObject{ {"name", "John Charte"},{"age", 15} };
+    school["teachers"].getArray() << UObject("teacher", { {"name", "Thierry Delcourt"}, {"subject", "Mathematics"} }) << UObject("teacher", { {"name", "Bernard Artman"}, {"subject", "French"} });
+    school["notes"] = UArray{ 12,"16", UObject{{"note", 15.4}},20,18 };
+    UArray& students = school["students"].getArray();
+    for (UObject& o : students)
+    {
+        o.setName("student");
+    }
+    std::string xmlString = XmlSerializer::serialize(school);
+    UObject xmlObject;
+    std::cout << xmlString << std::endl;
+    XmlSerializer::deserialize(xmlString, xmlObject);
+    XmlSerializer::serialize(std::cout, xmlObject);
+    std::string xmlJsonString = JsonSerializer::serialize(xmlObject, true);
+    std::cout << xmlJsonString;
+    UObject xmlJsonObject;
+    JsonSerializer::deserialize(xmlJsonString, xmlJsonObject);
+    XmlSerializer::serialize(std::cout, xmlJsonObject);
+    std::string iniString = IniSerializer::serialize(xmlObject);
+
+    IniSerializer::serialize(std::cout, xmlObject);
+    std::fstream fIni{ "Test.ini" };
+    IniSerializer::serialize(fIni, xmlObject);
+    UObject iniObject;
+    IniSerializer::deserialize(iniString, iniObject, true);
+    XmlSerializer::serialize(std::cout, iniObject, true);
+    char iniValue[100];
+    GetPrivateProfileStringA("school.notes.2", "note", "default", iniValue, 100, R"(C:\Users\Mathias\Documents\dev\cpp\UIO\UIO.console\Test.ini)");
+    std::cout << "school.notes.2: " << iniValue << std::endl;
+}
+
+static void TestTypes()
+{
+    E_UType types[] = { E_UType::Bool, E_UType::Short, E_UType::Int, E_UType::Float, E_UType::Double, E_UType::String };
     UObject o;
     UObject so;
     UArray ta;
@@ -304,7 +349,7 @@ int main()
     UArray& tRef = o["t"].getArray();
     std::string ojson = o.getString();
     UObject o2;
-	JsonSerializer::deserialize(ojson, o2);
+    JsonSerializer::deserialize(ojson, o2);
     TestValue(o2["o"]["hello"]);
     oRef.clear();
     tRef.clear();
@@ -313,34 +358,34 @@ int main()
         tRef.push_back(i);
     }
     oRef["tab"] = ta;
-	oRef["o2"] = E_UType::Object;
-	JsonSerializer::deserialize(R"({"a": 1, "b": "Test", "c": [1, "deux", {"d":true}]})", oRef["o2"].getObject());
+    oRef["o2"] = E_UType::Object;
+    JsonSerializer::deserialize(R"({"a": 1, "b": "Test", "c": [1, "deux", {"d":true}]})", oRef["o2"].getObject());
     o[10] = "test";
     TestValue(o[11]);
     TestValue(ta["1"]);
     TestValue(ta[0]);
     TestValue(ta[3]);
-	JsonSerializer::serialize(std::cout, o, true);
+    JsonSerializer::serialize(std::cout, o, true);
     TestValue(o.find("o.o2.c[2].d"));
     std::cout << o["t"].getString() << std::endl;
     std::cout << ta.getString() << std::endl;
     TestValue(o.find("o.tab[1]"));
     o.clear();
-	JsonSerializer::serialize(std::cout, o, true);
-    
-    TestSerialization();
-    TestJObject();
+    JsonSerializer::serialize(std::cout, o, true);
+}
 
+void TestFind()
+{
     UObject obj;
     UValue& v1 = obj.find("test.a");
     v1 = 3;
     UValue& v2 = obj.find("test.b");
     TestValue(v1);
     TestValue(v2);
-
+    UObject o;
     o["n"] = nullptr;
 
-	UArray aTest{ 1, "2", UObject{{ "item", 3 } }};
+    UArray aTest{ 1, "2", UObject{{ "item", 3 } } };
     aTest << nullptr << UArray{ 1,2,3 };
     TestValue(aTest);
     aTest[3] = 4;
@@ -370,37 +415,16 @@ int main()
     vFind = oTest.find("notFound");
     TestValue(vFind);
     TestValue(oTest["id"]);
-    UObject school{ {"teachers", E_UType::Array}, {"students", E_UType::Array} };
-    school.setName("school");
-    school["students"].getArray() << UObject{{"name", "Frédéric Jamard"},{"age", 16}} << UObject{{"name", "John Charte"},{"age", 15}};
-    school["teachers"].getArray() << UObject("teacher",{{"name", "Thierry Delcourt"}, {"subject", "Mathematics"}}) << UObject("teacher",{{"name", "Bernard Artman"}, {"subject", "French"}});
-    school["notes"] = UArray{ 12,"16", UObject{{"note", 15.4}},20,18 };
-    UArray& students = school["students"].getArray();
-    for (UObject& o : students)
-    {
-        o.setName("student");
-    }
-    std::string xmlString = XmlSerializer::serialize(school);
-    UObject xmlObject;
-    std::cout << xmlString << std::endl;
-    XmlSerializer::deserialize(xmlString, xmlObject);
-    XmlSerializer::serialize(std::cout, xmlObject);
-    std::string xmlJsonString = JsonSerializer::serialize(xmlObject, true);
-    std::cout << xmlJsonString;
-    UObject xmlJsonObject;
-    JsonSerializer::deserialize(xmlJsonString, xmlJsonObject);
-    XmlSerializer::serialize(std::cout, xmlJsonObject);
-    std::string iniString = IniSerializer::serialize(xmlObject);
+}
 
-    IniSerializer::serialize(std::cout, xmlObject);
-    std::fstream fIni{ "Test.ini" };
-    IniSerializer::serialize(fIni, xmlObject);
-    UObject iniObject;
-    IniSerializer::deserialize(iniString, iniObject, true);
-    XmlSerializer::serialize(std::cout, iniObject, true);
-    char iniValue[100];
-    GetPrivateProfileStringA("school.notes.2", "note", "default", iniValue, 100, R"(C:\Users\Mathias\Documents\dev\cpp\UIO\UIO.console\Test.ini)");
-    std::cout << "school.notes.2: " << iniValue << std::endl;
+int main()
+{
+    setlocale(LC_ALL, "en-US");
+   
+    TestTypes();
+    TestSerialization();
+    TestJObject();
+    TestFind();
     Example();
     //std::getchar();
 }
