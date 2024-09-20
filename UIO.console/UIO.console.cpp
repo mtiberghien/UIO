@@ -233,22 +233,22 @@ static void Example()
 {
     Flotte f;
     MachineD d{ "Machine D", true };
-    VehiculeA a{ "Véhicule A" };
     std::string json = R"({"vehicules": [{"name": "Véhicule A", "uio:name" : "A", "machines" :[{"name": "Machine C", "uio:name": "C", "value": 10}}]}]})";
     JsonSerializer::deserialize(json, f);
-    f.push_back(std::make_unique<VehiculeB>("Véhicule B"));
-    f[1]->push_back(std::make_unique<MachineD>(d));
+    f.push_back(VehiculeB("Véhicule B"));
+    f[1].push_back(d);
+    f[1].push_back(MachineC("MC", 5));
     json = JsonSerializer::serialize(f, true);
     std::cout << json;
     Flotte f2;
     JsonSerializer::deserialize(json, f2);
     for (const auto& v : f2)
     {
-        std::cout << "Véhicule: " << v->getName() << ", " << v->getType() << std::endl;
+        std::cout << "Véhicule: " << v.getName() << ", " << v.getType() << std::endl;
         std::cout << "\tMachines: " << std::endl;
-        for (const auto& m : *v)
+        for (const auto& m : v)
         {
-            std::cout << "\t " << m->getName() << ", " << m->getType() << std::endl;
+            std::cout << "\t " << m.getName() << ", " << m.getType() << std::endl;
         }
     }
     XmlSerializer::serialize(std::cout, f2);

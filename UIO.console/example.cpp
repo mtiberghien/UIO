@@ -13,15 +13,7 @@ std::unique_ptr<Vehicule> Vehicule::build(E_VehiculeType type)
 
 void Vehicule::toObject(UObject& object) const
 {
-	UArray a;
-	for (const auto& m : *this)
-	{
-		UObject o;
-		m->toObject(o);
-		a << o;
-	}
-	object["machines"] = a;
-	object["name"] = m_name;
+	object["name"] = getName();
 }
 
 static E_MachineType MachineFromString(const std::string& type)
@@ -32,13 +24,7 @@ static E_MachineType MachineFromString(const std::string& type)
 
 void Vehicule::fromObject(const UObject& object)
 {
-	clear();
-	m_name = object["name"].getString("undefined");
-	for (const UObject& m : object["machines"].getArray())
-	{
-		push_back(Machine::build(MachineFromString(m.getName())));
-		back()->fromObject(m);
-	}
+	setName(object["name"].getString("undefined"));
 }
 
 std::unique_ptr<Machine> Machine::build(E_MachineType type)
@@ -63,12 +49,12 @@ void Machine::fromObject(const UObject& object)
 
 void Machine::writeCommonProperties(UObject& object) const
 {
-	object["name"] = m_name;
+	object["name"] = getName();
 }
 
 void Machine::readCommonProperties(const UObject& object)
 {
-	m_name = object["name"].getString("undefined");
+	setName(object["name"].getString("undefined"));
 }
 
 void MachineC::fromObject(const UObject& object)
@@ -104,7 +90,7 @@ void Flotte::toObject(UObject& object) const
 	for (const auto& v : *this)
 	{
 		UObject o;
-		v->toObject(o);
+		v.toObject(o);
 		a << o;
 	}
 	object["vehicules"] = a;
@@ -121,7 +107,54 @@ void Flotte::fromObject(const UObject& object)
 	clear();
 	for (const UObject& v : object["vehicules"].getArray())
 	{
-		push_back(Vehicule::build(VehiculefromString(v.getName())));
-		back()->fromObject(v);
+		push_back(VehiculefromString(v.getName()));
+		back().fromObject(v);
+	}
+}
+
+STD::STD(const Machine& machine)
+{
+	switch (machine.getType())
+	{
+	case E_MachineType::C: m_ptr = std::make_unique<MachineC>(dynamic_cast<const MachineC&>(machine)); break;
+	case E_MachineType::D: m_ptr = std::make_unique<MachineD>(dynamic_cast<const MachineD&>(machine)); break;
+	default: m_ptr = nullptr;
+	}
+}
+STD::STD(E_MachineType type) : m_ptr(Machine::build(type)) {}
+
+SSP::SSP(const Vehicule& vehicule)
+{
+	switch (vehicule.getType())
+	{
+	case E_VehiculeType::A: m_ptr = std::make_unique<VehiculeA>(dynamic_cast<const VehiculeA&>(vehicule)); break;
+	case E_VehiculeType::B: m_ptr = std::make_unique<VehiculeB>(dynamic_cast<const VehiculeB&>(vehicule)); break;
+	default: m_ptr = nullptr;
+	}
+}
+
+SSP::SSP(E_VehiculeType type) : m_ptr(Vehicule::build(type)) {}
+
+void SSP::toObject(UObject& object) const
+{
+	m_ptr->toObject(object);
+	UArray a;
+	for (const auto& m : *this)
+	{
+		UObject o;
+		m.toObject(o);
+		a << o;
+	}
+	object["machines"] = a;
+}
+
+void SSP::fromObject(const UObject& object)
+{
+	m_ptr->fromObject(object);
+	clear();
+	for (const UObject& m : object["machines"].getArray())
+	{
+		push_back(MachineFromString(m.getName()));
+		back().fromObject(m);
 	}
 }
