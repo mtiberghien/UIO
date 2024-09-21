@@ -240,9 +240,9 @@ namespace uio
 			if (readAttributeKey(stream, prefix, attributeKey) && readAttributeValue(stream, value))
 			{
 				bool isUIOSchema = UIOHelper::iequals("uio", prefix);
-				bool isUIOName = isUIOSchema && UIOHelper::iequals("name", attributeKey);
+				bool isUIOClass = isUIOSchema && UIOHelper::iequals("class", attributeKey);
 				bool isAttribute = prefix.empty();
-				bool shouldBeObject = isAttribute || isUIOName;
+				bool shouldBeObject = isAttribute || isUIOClass;
 				if (shouldBeObject && item.isUndefined())
 				{
 					((UValue&)item) = E_UType::Object;
@@ -254,9 +254,9 @@ namespace uio
 					{
 						UIOHelper::setValue(item[attributeKey], value);
 					}
-					if (isUIOName)
+					if (isUIOClass)
 					{
-						item.getObject().setName(value);
+						item.getObject().setClass(value);
 					}
 				}
 				if (isUIOSchema && UIOHelper::iequals("key", attributeKey))
@@ -315,9 +315,9 @@ namespace uio
 				if(item.isObject())
 				{
 					UObject& o = item.getObject();
-					if (o.getName().empty() && !UIOHelper::iequals(toString(E_UType::Object), elementName))
+					if (o.getClass().empty() && !UIOHelper::iequals(toString(E_UType::Object), elementName))
 					{
-						o.setName(UIOHelper::toLower(elementName));
+						o.setClass(UIOHelper::toLower(elementName));
 					}			
 				}
 				if (hasContent)

@@ -221,14 +221,14 @@ namespace uio
 							else
 							{
 								v = kvp.second.getObject();
-								v.getObject().setName(name);
+								v.getObject().setClass(name);
 							}
 						}
 					}
 				}
 				else if (!UIOHelper::iequals(toString(E_UType::Object), kvp.first))
 				{
-					kvp.second.getObject().setName(kvp.first);
+					kvp.second.getObject().setClass(kvp.first);
 				}
 			}
 		}

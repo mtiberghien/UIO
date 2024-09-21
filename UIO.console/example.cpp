@@ -13,7 +13,8 @@ std::unique_ptr<Vehicule> Vehicule::build(E_VehiculeType type)
 
 void Vehicule::toObject(UObject& object) const
 {
-	object["name"] = getName();
+	object.setClass(::toString(getType()));
+	Named::toObject(object);
 }
 
 static E_MachineType MachineFromString(const std::string& type)
@@ -24,7 +25,14 @@ static E_MachineType MachineFromString(const std::string& type)
 
 void Vehicule::fromObject(const UObject& object)
 {
-	setName(object["name"].getString("undefined"));
+	Named::fromObject(object);
+}
+
+std::string Vehicule::toString() const
+{
+	std::ostringstream s;
+	s << Named::toString() << ", type: " << ::toString(getType());
+	return s.str();
 }
 
 std::unique_ptr<Machine> Machine::build(E_MachineType type)
@@ -49,12 +57,20 @@ void Machine::fromObject(const UObject& object)
 
 void Machine::writeCommonProperties(UObject& object) const
 {
-	object["name"] = getName();
+	Named::toObject(object);
+	object.setClass(::toString(getType()));
+}
+
+std::string Machine::toString() const
+{
+	std::ostringstream s;
+	s << Named::toString() << ", type: " << ::toString(getType());
+	return s.str();
 }
 
 void Machine::readCommonProperties(const UObject& object)
 {
-	setName(object["name"].getString("undefined"));
+	Named::fromObject(object);
 }
 
 void MachineC::fromObject(const UObject& object)
@@ -65,9 +81,15 @@ void MachineC::fromObject(const UObject& object)
 
 void MachineC::toObject(UObject& object) const
 {
-	object.setName("C");
 	writeCommonProperties(object);
 	object["value"] = m_value;
+}
+
+std::string MachineC::toString() const
+{
+	std::ostringstream s;
+	s << Machine::toString() << ", value: " << m_value;
+	return s.str();
 }
 
 void MachineD::fromObject(const UObject& object)
@@ -78,14 +100,20 @@ void MachineD::fromObject(const UObject& object)
 
 void MachineD::toObject(UObject& object) const
 {
-	object.setName("D");
 	writeCommonProperties(object);
 	object["isWorking"] = m_isWorking;
 }
 
+std::string MachineD::toString() const
+{
+	std::ostringstream s;
+	s << Machine::toString() << ", isWorking: " << (m_isWorking ? "true": "false");
+	return s.str();
+}
+
 void Flotte::toObject(UObject& object) const
 {
-	object.setName("flotte");
+	object.setClass("flotte");
 	UArray a;
 	for (const auto& v : *this)
 	{
@@ -94,6 +122,17 @@ void Flotte::toObject(UObject& object) const
 		a << o;
 	}
 	object["vehicules"] = a;
+}
+
+std::string Flotte::toString() const
+{
+	std::ostringstream s;
+	s << "Flotte:" << std::endl;
+	for (const auto& v : *this)
+	{
+		s << "* " << v.toString();
+	}
+	return s.str();
 }
 
 static E_VehiculeType VehiculefromString(const std::string& type)
@@ -107,12 +146,12 @@ void Flotte::fromObject(const UObject& object)
 	clear();
 	for (const UObject& v : object["vehicules"].getArray())
 	{
-		push_back(VehiculefromString(v.getName()));
+		push_back(VehiculefromString(v.getClass()));
 		back().fromObject(v);
 	}
 }
 
-STD::STD(const Machine& machine)
+SDT::SDT(const Machine& machine)
 {
 	switch (machine.getType())
 	{
@@ -121,7 +160,7 @@ STD::STD(const Machine& machine)
 	default: m_ptr = nullptr;
 	}
 }
-STD::STD(E_MachineType type) : m_ptr(Machine::build(type)) {}
+SDT::SDT(E_MachineType type) : m_ptr(Machine::build(type)) {}
 
 SSP::SSP(const Vehicule& vehicule)
 {
@@ -154,7 +193,36 @@ void SSP::fromObject(const UObject& object)
 	clear();
 	for (const UObject& m : object["machines"].getArray())
 	{
-		push_back(MachineFromString(m.getName()));
+		push_back(MachineFromString(m.getClass()));
 		back().fromObject(m);
 	}
+}
+
+std::string SSP::toString() const
+{
+	std::ostringstream s;
+	s << "Véhicule: " << std::endl << " " << m_ptr->toString() << std::endl;
+	s << "Machines: " << std::endl;
+	for (const auto& m : *this)
+	{
+		s << " - " << m.toString() << std::endl;
+	}
+	return s.str();
+}
+
+void Named::fromObject(const UObject& object)
+{
+	m_name = object["name"].getString("undefined");
+}
+
+void Named::toObject(UObject& object) const
+{
+	object["name"] = m_name;
+}
+
+std::string Named::toString() const
+{
+	std::ostringstream s;
+	s << "name: " << m_name;
+	return s.str();
 }

@@ -35,7 +35,7 @@ namespace uio
 			stream << i << " = ";
 			switch (value.getType())
 			{
-			case E_UType::Object: writeObjectRef(stream, path, std::to_string(i), value.getObject().getName()); break;
+			case E_UType::Object: writeObjectRef(stream, path, std::to_string(i), value.getObject().getClass()); break;
 			case E_UType::Array: writeArrayRef(stream, path, std::to_string(i)); break;
 			default: writeValue(stream, value);  break;
 			}
@@ -70,7 +70,7 @@ namespace uio
 			stream << kvp.first << " = ";
 			switch (kvp.second.getType())
 			{
-			case E_UType::Object: writeObjectRef(stream, path, kvp.first, kvp.second.getObject().getName()); break;
+			case E_UType::Object: writeObjectRef(stream, path, kvp.first, kvp.second.getObject().getClass()); break;
 			case E_UType::Array: writeArrayRef(stream, path, kvp.first); break;
 			default: writeValue(stream, kvp.second);  break;
 			}
@@ -102,7 +102,7 @@ namespace uio
 		case E_UType::Object:
 		{
 			const UObject& o = item.getObject();
-			std::string root = o.getName();
+			std::string root = o.getClass();
 			path << (root.empty() ? toString(E_UType::Object) : root);
 			writeObject(stream, o, path); break;
 		}			

@@ -187,7 +187,7 @@ namespace UIOTests
 			Assert::AreEqual(std::string{ "Object{test: String, test2: Int}" }, o.getString());
 			o["test2"] = UObject{ {"a", 1} };
 			Assert::AreEqual(std::string{ "Object{test: String, test2: Object}" }, o.getString());
-			o.setName("test");
+			o.setClass("test");
 			Assert::AreEqual(std::string{ "Object:test{test: String, test2: Object}" }, o.getString());
 
 		}

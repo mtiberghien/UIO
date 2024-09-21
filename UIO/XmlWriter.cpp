@@ -115,7 +115,7 @@ namespace uio
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();
 		UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
-		std::string elementName = getElementNameOrType(key.empty() ? object.getName() : key, E_UType::Object);
+		std::string elementName = getElementNameOrType(key.empty() ? object.getClass() : key, E_UType::Object);
 		beginObject(stream,  elementName);
 		int childrenCount = 0;
 		if (indentLevel == 0)
@@ -123,7 +123,7 @@ namespace uio
 			declareNameSpace(stream, "uio", "urn:uio:schema");
 		}
 		writeNonEmptyAttribute(stream, "key", key);
-		writeNonEmptyAttribute(stream, "name", object.getName());
+		writeNonEmptyAttribute(stream, "class", object.getClass());
 		if (!object.isEmpty())
 		{
 			for (auto it = object.begin(); it != object.end(); it++)

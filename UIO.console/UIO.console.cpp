@@ -21,7 +21,7 @@ public:
     Item(const std::string& name, int id) : m_name(name), m_id(id) {}
     void toObject(UObject& object) const override
     {
-        object.setName("item");
+        object.setClass("item");
         object["name"] = m_name;
         object["id"] = m_id;
     }
@@ -45,7 +45,7 @@ public:
     }
     void toObject(UObject& object) const override
     {
-        object.setName("items");
+        object.setClass("items");
         UArray l_devices;
         for (auto& d : m_items)
         {
@@ -229,31 +229,23 @@ void setValue(UValue& v)
     v = value;
 }
 
+
 static void Example()
 {
     Flotte f;
     MachineD d{ "Machine D", true };
-    std::string json = R"({"vehicules": [{"name": "Véhicule A", "uio:name" : "A", "machines" :[{"name": "Machine C", "uio:name": "C", "value": 10}}]}]})";
-    JsonSerializer::deserialize(json, f);
+    std::string jsonInit = R"({"vehicules": [{"machines" :[{"name": "Machine C", "value": 10}}], "name": "Véhicule A"}]})";
+    JsonSerializer::deserialize(jsonInit, f);
     f.push_back(VehiculeB("Véhicule B"));
     f[1].push_back(d);
     f[1].push_back(MachineC("MC", 5));
-    json = JsonSerializer::serialize(f, true);
+    std::string json = JsonSerializer::serialize(f, true);
     std::cout << "****Json****" << std::endl;
     std::cout << json << std::endl;
     Flotte f2;
     JsonSerializer::deserialize(json, f2);
     std::cout << "****Object****" << std::endl;
-    for (const auto& v : f2)
-    {
-        std::cout << "Véhicule: " << v.getName() << ", " << toString(v.getType()) << std::endl;
-        std::cout << "\tMachines: " << std::endl;
-        for (const auto& m : v)
-        {
-            std::cout << "\t " << m.getName() << ", " << toString(m.getType()) << std::endl;
-        }
-    }
-    std::cout << std::endl;
+    std::cout << f2.toString() << std::endl;
 
     std::stringstream s;
     XmlSerializer::serialize(s, f2);
@@ -262,21 +254,30 @@ static void Example()
     std::cout << s.str() << std::endl;
     s.seekg(0);
     XmlSerializer::deserialize(s, f3);
+    s.str("");
     std::cout << "****Ini****" << std::endl;
-    IniSerializer::serialize(std::cout, f3);
+    IniSerializer::serialize(s, f3);
+    std::cout << s.str() << std::endl;
+    Flotte f4;
+    IniSerializer::deserialize(s.str(), f4);
+    f4.erase(f4.begin()+1);
+    std::cout << "Json init: " << jsonInit << std::endl;
+    std::cout << "Json end: ";
+    JsonSerializer::serialize(std::cout, f4, E_ClassWriteMode::Skip);
+    std::cout << std::endl;
 }
 
 static void School()
 {
     UObject school{ {"teachers", E_UType::Array}, {"students", E_UType::Array} };
-    school.setName("school");
+    school.setClass("school");
     school["students"].getArray() << UObject{ {"name", "Frédéric Jamard"},{"age", 16} } << UObject{ {"name", "John Charte"},{"age", 15} };
     school["teachers"].getArray() << UObject("teacher", { {"name", "Thierry Delcourt"}, {"subject", "Mathematics"} }) << UObject("teacher", { {"name", "Bernard Artman"}, {"subject", "French"} });
     school["notes"] = UArray{ 12,"16", UObject{{"note", 15.4}},20,18 };
     UArray& students = school["students"].getArray();
     for (UObject& o : students)
     {
-        o.setName("student");
+        o.setClass("student");
     }
     std::string xmlString = XmlSerializer::serialize(school);
     UObject xmlObject;

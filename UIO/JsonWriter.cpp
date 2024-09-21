@@ -41,10 +41,13 @@ namespace uio
 		if (!object.isEmpty())
 		{
 			UIOHelper::handleIndent(stream, indent, indentLevel, Increment);
-			if (!object.getName().empty())
+			if (!object.getClass().empty())
 			{
-				writeProperty(stream, "uio:name", object.getName(), settings, indentLevel);
-				stream << ", ";
+				if (settings.getClassWriteMode() != E_ClassWriteMode::Skip)
+				{
+					writeProperty(stream, "uio:class", object.getClass(), settings, indentLevel);
+					stream << ", ";
+				}
 				UIOHelper::handleIndent(stream, indent, indentLevel, None);
 			}
 			for (auto it = object.begin(); it != object.end(); it++)

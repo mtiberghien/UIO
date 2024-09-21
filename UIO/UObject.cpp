@@ -5,7 +5,7 @@
 
 namespace uio
 {
-	UObject::UObject(const std::string& name, std::initializer_list < std::pair<const std::string, UValue>> properties): m_name(name), m_properties(properties)
+	UObject::UObject(const std::string& name, std::initializer_list < std::pair<const std::string, UValue>> properties): m_class(name), m_properties(properties)
 	{
 	}
 
@@ -17,7 +17,7 @@ namespace uio
 		{
 			this->operator [](it.first) = it.second;
 		}
-		this->setName(o.getName());
+		this->setClass(o.getClass());
 		return *this;
 	}
 
@@ -100,9 +100,9 @@ namespace uio
 	{
 		std::ostringstream s;
 		s << "Object";
-		if (!m_name.empty())
+		if (!m_class.empty())
 		{
-			s << ":" << m_name;
+			s << ":" << m_class;
 		}
 		s << "{";
 		for (auto it = begin(); it != end(); it++)

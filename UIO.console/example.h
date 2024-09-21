@@ -30,6 +30,13 @@ static std::string toString(E_MachineType type)
 	}
 }
 
+class IObject
+{
+public:
+	virtual ~IObject() {}
+	virtual std::string toString() const = 0;
+};
+
 class INamed
 {
 public:
@@ -37,18 +44,21 @@ public:
 	virtual std::string getName() const = 0;
 };
 
-class Named: public virtual INamed
+class Named: public virtual INamed, public virtual IUSerializable, public virtual IObject
 {
 public:
 	Named(std::string name) : m_name(name) {}
 	virtual ~Named() {}
 	std::string getName() const override { return m_name; }
 	void setName(const std::string& name) { m_name = name; }
+	void toObject(UObject& object) const override;
+	void fromObject(const UObject& object) override;
+	std::string toString() const override;
 private:
 	std::string m_name{ "" };
 };
 
-class IMachine: public virtual IUSerializable, public virtual INamed
+class IMachine: public virtual IUSerializable, public virtual INamed, public virtual IObject
 {
 public:
 	virtual ~IMachine() {}
@@ -57,15 +67,17 @@ public:
 
 class Machine;
 
-class STD : public virtual IMachine
+class SDT : public virtual IMachine
 {
 public:
-	STD(const Machine& machine);
-	STD(E_MachineType type);
+	SDT(const Machine& machine);
+	SDT(E_MachineType type);
 	E_MachineType getType() const override { return m_ptr->getType(); }
 	std::string getName() const override { return m_ptr->getName(); }
 	virtual void toObject(uio::UObject& object) const override { m_ptr->toObject(object);}
 	virtual void fromObject(const uio::UObject& object) override { m_ptr->fromObject(object); }
+	const IMachine& getMachine() const { return *m_ptr; }
+	virtual std::string toString() const override { return m_ptr->toString(); }
 private:
 	std::unique_ptr<IMachine> m_ptr;
 };
@@ -77,10 +89,10 @@ public:
 	Machine(std::string name) : Named(name) {}
 	Machine(const Machine& machine) = default;
 	virtual ~Machine() {}
-	virtual E_MachineType getType() const = 0;
 	static std::unique_ptr<Machine> build(E_MachineType type);
 	virtual void toObject(uio::UObject& object) const override;
 	virtual void fromObject(const uio::UObject& object) override;
+	virtual std::string toString() const override;
 protected:
 	void writeCommonProperties(UObject& object) const;
 	void readCommonProperties(const UObject& object);
@@ -97,6 +109,7 @@ public:
 	void setValue(int value) { m_value = value; }
 	void toObject(UObject& object) const override;
 	void fromObject(const UObject& object) override;
+	std::string toString() const override;
 private:
 	int m_value{ 0 };
 };
@@ -111,11 +124,12 @@ public:
 	void setIsWorking(bool isWorking) { m_isWorking = isWorking; }
 	void toObject(UObject& object) const override;
 	void fromObject(const UObject& object) override;
+	std::string toString() const override;
 private:
 	bool m_isWorking{ false };
 };
 
-class IVehicule : public virtual IUSerializable, public virtual INamed
+class IVehicule : public virtual IUSerializable, public virtual INamed, public virtual IObject
 {
 public:
 	virtual ~IVehicule() {}
@@ -124,7 +138,7 @@ public:
 
 class Vehicule;
 
-class SSP : public std::vector<STD>, public virtual IVehicule
+class SSP : public std::vector<SDT>, public virtual IVehicule
 {
 public:
 	SSP(E_VehiculeType type);
@@ -133,7 +147,7 @@ public:
 	E_VehiculeType getType() const override { return m_ptr->getType(); }
 	virtual void toObject(UObject& object) const override;
 	void fromObject(const UObject& object) override;
-
+	std::string toString() const override;
 private:
 	std::unique_ptr<IVehicule> m_ptr;
 };
@@ -149,6 +163,7 @@ public:
 	static std::unique_ptr<Vehicule> build(E_VehiculeType type);
 	virtual void toObject(UObject& object) const override;
 	void fromObject(const UObject& object) override;
+	virtual std::string toString() const override;
 };
 
 class VehiculeA : public Vehicule
@@ -160,7 +175,6 @@ public:
 	void toObject(UObject& object) const override
 	{
 		Vehicule::toObject(object);
-		object.setName("A");
 	}
 };
 
@@ -173,15 +187,15 @@ public:
 	void toObject(UObject& object) const override
 	{
 		Vehicule::toObject(object);
-		object.setName("B");
 	}
 };
 
-class Flotte : public std::vector<SSP>, public IUSerializable
+class Flotte : public std::vector<SSP>, public virtual IUSerializable, public virtual IObject
 {
 public:
 	void toObject(UObject& object) const override;
 	void fromObject(const UObject& object) override;
+	std::string toString() const override;
 };
 
 

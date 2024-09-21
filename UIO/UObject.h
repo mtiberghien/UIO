@@ -13,7 +13,7 @@ namespace uio
 	{
 	public:
 		UObject() {}
-		UObject(const std::string& name) : m_name(name) {}
+		UObject(const std::string& name) : m_class(name) {}
 		UObject(const std::string& name, std::initializer_list < std::pair<const std::string, UValue>> properties);
 		UObject(std::initializer_list < std::pair<const std::string, UValue>> properties) : UObject("", properties) {}
 		virtual ~UObject() { m_properties.clear(); }
@@ -44,13 +44,13 @@ namespace uio
 		std::map<std::string, UValue>::iterator end() { return m_properties.end(); }
 		bool operator==(const IUValue& other) const override;
 		UValue& getOrError(const std::string& key) override;
-		const std::string& getName() const { return m_name; }
-		virtual void setName(const std::string& name) { m_name = name; }
+		const std::string& getClass() const { return m_class; }
+		virtual void setClass(const std::string& name) { m_class = name; }
 		bool erase(const std::string& key) override;
 		bool eraseAt(int index) override;
 
 	private:
-		std::string m_name{ "" };
+		std::string m_class{ "" };
 		std::map<std::string, UValue> m_properties;
 	};
 
@@ -63,7 +63,7 @@ namespace uio
 		UValue& operator[](const std::string& key) override;
 		UValue& operator[](int index) override;
 		UObject& operator=(const UObject& object) override { return *this; }
-		void setName(const std::string& name) override {}
+		void setClass(const std::string& name) override {}
 	};
 
 	class UObjectProvider

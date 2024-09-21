@@ -55,13 +55,13 @@ namespace uio
 		bool isOk = false;
 		if (readAttributeKey(stream, key))
 		{
-			if (UIOHelper::iequals("uio:name", key))
+			if (UIOHelper::iequals("uio:class", key))
 			{
 				UValue v;
 				isOk = readValue(stream, v, hasNext);
 				if (isOk)
 				{
-					object.setName(v.getString());
+					object.setClass(v.getString());
 				}
 			}
 			else
