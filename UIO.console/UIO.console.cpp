@@ -426,6 +426,9 @@ int main()
     TestSerialization();
     TestJObject();
     TestFind();
+    School();
     Example();
+
+
     //std::getchar();
 }

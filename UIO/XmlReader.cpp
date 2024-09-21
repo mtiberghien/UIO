@@ -215,8 +215,9 @@ namespace uio
 
 	
 
-	static bool readAttributes(std::istream& stream, UItem& item, bool& hasChildren, std::string& key)
+	static bool readAttributes(std::istream& stream, UItem& item, bool& hasContent, std::string& key)
 	{
+		bool isArray = false;
 		while (UIOHelper::findFirstNonSpaceCharacter(stream))
 		{
 			if (stream.peek() == '/')
@@ -224,14 +225,18 @@ namespace uio
 				stream.get();
 				if (stream.peek() == '>')
 				{
-					hasChildren = false;
+					hasContent = false;
 					return true;
 				}
 			}
 			else  if (stream.peek() == '>')
 			{
 				stream.get();
-				hasChildren = true;
+				hasContent = true;
+				if (isArray && item.isUndefined())
+				{
+					((UValue&)item) = E_UType::Array;
+				}
 				return true;
 			}
 			std::string prefix{ "" };
@@ -259,9 +264,17 @@ namespace uio
 						item.getObject().setClass(value);
 					}
 				}
-				if (isUIOSchema && UIOHelper::iequals("key", attributeKey))
+				if (isUIOSchema)
 				{
-					key = value;
+					if (UIOHelper::iequals("key", attributeKey))
+					{
+						key = value;
+					}
+					else if (UIOHelper::iequals("type", attributeKey))
+					{
+						isArray = UIOHelper::iequals(toString(E_UType::Array), value);
+					}
+					
 				}
 			}
 		}
@@ -304,6 +317,23 @@ namespace uio
 		}
 	}
 
+	static bool changeToArray(UItem& item)
+	{
+		UValue* ptrV = dynamic_cast<UValue*>(&item);
+		if (ptrV)
+		{
+			UObject o = item.getObject();
+			UArray a;
+			for (const auto& v : o)
+			{
+				a << v.second;
+			}
+			*ptrV = a;
+			return true;
+		}
+		return false;
+	}
+
 	static bool readMarkupItem(std::istream& stream, UItem& item, std::string& key, E_MarkupType& foundType)
 	{
 		if (getFirstBeginMarkup(stream, foundType))
@@ -312,6 +342,7 @@ namespace uio
 			bool hasContent;
 			if (readAttributes(stream, item, hasContent, key))
 			{
+				key = key.empty() ? elementName : key;
 				if(item.isObject())
 				{
 					UObject& o = item.getObject();
@@ -328,7 +359,7 @@ namespace uio
 						{
 							if (item.isUndefined())
 							{
-								((UValue&)item) = E_UType::Array;
+								((UValue&)item) = E_UType::Object;
 							}
 							bool hasNext = false;
 							do
@@ -348,7 +379,18 @@ namespace uio
 								}
 								if (item.isObject())
 								{
-									item[childKey] = child;
+									if (!item.getObject().exists(childKey))
+									{
+										item[childKey] = child;
+									}
+									else
+									{
+										if (changeToArray(item))
+										{
+											item.getArray().push_back(child);
+										}
+										else return false;
+									}
 								}
 								else if (item.isArray())
 								{

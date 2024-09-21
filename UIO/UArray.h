@@ -2,7 +2,8 @@
 #include "UItem.h"
 #include "UIO.h"
 #include "IUContainer.h"
-
+#include <vector>
+#include <string>
 
 namespace uio
 {

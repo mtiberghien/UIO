@@ -173,6 +173,7 @@ namespace uio
 			declareNameSpace(stream, "uio", "urn:uio:schema");
 		}
 		writeNonEmptyAttribute(stream, "key", key);
+		writeNonEmptyAttribute(stream, "type", toString(E_UType::Array));
 		if (!array.isEmpty())
 		{
 			stream << ">";

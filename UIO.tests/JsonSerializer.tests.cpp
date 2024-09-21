@@ -212,6 +212,14 @@ namespace UIOTests
 			Assert::AreEqual(std::string{ "[1, 2, 3]" }, json);
 		}
 
+		TEST_METHOD(DealWithCarriageReturn)
+		{
+			std::string json = R"({"test": "Hello\nWorld"})";
+			UObject o;
+			Assert::IsTrue(JsonSerializer::deserialize(json, o));
+			Assert::AreEqual(std::string{ "Hello\nWorld" }, o["test"].getString());
+		}
+
 
 	};
 }

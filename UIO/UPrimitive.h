@@ -5,6 +5,11 @@
 #include "UIO.h"
 #include "UObject.h"
 #include "UArray.h"
+#include <limits>
+#include <type_traits>
+#include <sstream>
+#include <stddef.h>
+
 
 namespace uio
 {
@@ -128,7 +133,8 @@ namespace uio
 		std::string getString<double>(const std::string& defaultValue) const
 		{
 			std::ostringstream s;
-			s << std::setprecision(std::numeric_limits<double>::digits10 + 1);
+			auto p = std::numeric_limits<double>::digits10 + 1;
+			s << std::setprecision(p);
 			s << m_value;
 			return s.str();
 		}

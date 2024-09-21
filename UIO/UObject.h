@@ -2,6 +2,9 @@
 #include "UItem.h"
 #include "UIO.h"
 #include "IUContainer.h"
+#include <map>
+#include <string>
+#include <initializer_list>
 
 namespace uio
 {
