@@ -297,6 +297,7 @@ namespace uio
 				s << c;
 			}
 		}
+		return s.str();
 	}
 
 	static std::string getValueContent(std::istream& stream)
@@ -315,6 +316,7 @@ namespace uio
 				return s.str();
 			}
 		}
+		return s.str();
 	}
 
 	static bool changeToArray(UItem& item)

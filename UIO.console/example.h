@@ -58,7 +58,7 @@ private:
 	std::string m_name{ "" };
 };
 
-class IMachine: public virtual IUSerializable, public virtual INamed, public virtual IObject
+class IMachine: public virtual IUSerializable, public virtual IObject
 {
 public:
 	virtual ~IMachine() {}
@@ -67,19 +67,19 @@ public:
 
 class Machine;
 
-class SDT : public virtual IMachine
+class SDT : public virtual IMachine, public virtual INamed
 {
 public:
 	SDT(const Machine& machine);
 	SDT(E_MachineType type);
-	E_MachineType getType() const override { return m_ptr->getType(); }
-	std::string getName() const override { return m_ptr->getName(); }
-	virtual void toObject(uio::UObject& object) const override { m_ptr->toObject(object);}
-	virtual void fromObject(const uio::UObject& object) override { m_ptr->fromObject(object); }
-	const IMachine& getMachine() const { return *m_ptr; }
-	virtual std::string toString() const override { return m_ptr->toString(); }
+	E_MachineType getType() const override;
+	std::string getName() const override;
+	virtual void toObject(uio::UObject& object) const override;
+	virtual void fromObject(const uio::UObject& object) override;
+	const Machine& getMachine() const;
+	virtual std::string toString() const override;
 private:
-	std::unique_ptr<IMachine> m_ptr;
+	std::unique_ptr<Machine> m_ptr;
 };
 
 class Machine : public Named, public virtual IMachine
@@ -129,7 +129,7 @@ private:
 	bool m_isWorking{ false };
 };
 
-class IVehicule : public virtual IUSerializable, public virtual INamed, public virtual IObject
+class IVehicule : public virtual IUSerializable, public virtual IObject
 {
 public:
 	virtual ~IVehicule() {}
@@ -138,18 +138,18 @@ public:
 
 class Vehicule;
 
-class SSP : public std::vector<SDT>, public virtual IVehicule
+class SSP : public std::vector<SDT>, public virtual IVehicule, public virtual INamed
 {
 public:
 	SSP(E_VehiculeType type);
 	SSP(const Vehicule& vehicule);
-	std::string getName() const override { return m_ptr->getName(); }
-	E_VehiculeType getType() const override { return m_ptr->getType(); }
+	std::string getName() const override;
+	E_VehiculeType getType() const override;
 	virtual void toObject(UObject& object) const override;
 	void fromObject(const UObject& object) override;
 	std::string toString() const override;
 private:
-	std::unique_ptr<IVehicule> m_ptr;
+	std::unique_ptr<Vehicule> m_ptr;
 };
 
 class Vehicule: public Named, public virtual IVehicule

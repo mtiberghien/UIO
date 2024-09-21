@@ -162,6 +162,36 @@ SDT::SDT(const Machine& machine)
 }
 SDT::SDT(E_MachineType type) : m_ptr(Machine::build(type)) {}
 
+E_MachineType SDT::getType() const
+{
+	return m_ptr->getType();
+}
+
+std::string SDT::getName() const
+{
+	return m_ptr->getName();
+}
+
+void SDT::toObject(uio::UObject& object) const
+{
+	m_ptr->toObject(object);
+}
+
+void SDT::fromObject(const uio::UObject& object)
+{
+	m_ptr->fromObject(object);
+}
+
+const Machine& SDT::getMachine() const
+{
+	return *m_ptr;
+}
+
+std::string SDT::toString() const
+{
+	return m_ptr->toString();
+}
+
 SSP::SSP(const Vehicule& vehicule)
 {
 	switch (vehicule.getType())
@@ -196,6 +226,16 @@ void SSP::fromObject(const UObject& object)
 		push_back(MachineFromString(m.getClass()));
 		back().fromObject(m);
 	}
+}
+
+std::string SSP::getName() const
+{
+	return m_ptr->getName();
+}
+
+E_VehiculeType SSP::getType() const
+{
+	return m_ptr->getType();
 }
 
 std::string SSP::toString() const

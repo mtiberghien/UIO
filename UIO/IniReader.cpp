@@ -253,9 +253,9 @@ namespace uio
 		}
 		if (settings.getObjectify())
 		{
-			objectify(object);
+			return objectify(object);
 		}
-		
+		return true;
 	}
 
 

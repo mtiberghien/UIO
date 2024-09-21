@@ -13,7 +13,7 @@ namespace uio
 	class UObject;
 	class UArray;
 
-	class UIO_API IUValue
+	class IUValue
 	{
 	public:
 		IUValue() {}

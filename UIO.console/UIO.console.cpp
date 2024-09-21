@@ -46,7 +46,7 @@ public:
     void toObject(UObject& object) const override
     {
         object.setClass("items");
-        UArray l_devices;
+        UArray l_devices{};
         for (auto& d : m_items)
         {
             UObject o;
@@ -89,7 +89,7 @@ private:
     std::vector<Item> m_items;
 };
 
-std::ostream& operator<<(std::ostream& stream, E_UType type)
+static std::ostream& operator<<(std::ostream& stream, E_UType type)
 {
     stream << toString(type);
     return stream;
@@ -97,7 +97,7 @@ std::ostream& operator<<(std::ostream& stream, E_UType type)
 
 
 
-void TestValue(const UValue& v, E_UType type=E_UType::String)
+static void TestValue(const UValue& v, E_UType type=E_UType::String)
 {
     std::cout << v.getType() << ": ";
     switch (type)
@@ -112,14 +112,14 @@ void TestValue(const UValue& v, E_UType type=E_UType::String)
     std::cout << std::endl;
 }
 
-void ChangeValue(UValue& v)
+static void ChangeValue(UValue& v)
 {
     v = "test";
 }
 
 #include <fstream>
 
-void TestJObject()
+static void TestJObject()
 {
     UObject o;
     o["isOk"] = true;
@@ -190,7 +190,7 @@ void TestJObject()
 
 
 
-void TestSerialization()
+static void TestSerialization()
 {
     Items d;
     d.add({ "device_1", 1 });
@@ -223,7 +223,7 @@ void TestSerialization()
     */
 }
 
-void setValue(UValue& v)
+static void setValue(UValue& v)
 {
     UValue value = 1;
     v = value;
@@ -375,7 +375,7 @@ static void TestTypes()
     JsonSerializer::serialize(std::cout, o, true);
 }
 
-void TestFind()
+static void TestFind()
 {
     UObject obj;
     UValue& v1 = obj.find("test.a");
