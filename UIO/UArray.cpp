@@ -13,7 +13,7 @@ namespace uio
 		E_UType t;
 		if (UIOHelper::tryGetNumber(key, d, t))
 		{
-			return m_items[(int)d];
+			return this->operator[]((int)d);
 		}
 		return UUndefinedProvider::getError();
 	}

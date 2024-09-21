@@ -274,7 +274,7 @@ namespace uio
 		while (!stream.eof())
 		{
 			unsigned char c = stream.peek();
-			if ( std::isspace(c) || c == '>')
+			if ( std::isspace(c) || c == '>' || c == '/')
 			{
 				return s.str();
 			}
@@ -372,6 +372,10 @@ namespace uio
 				}
 				else
 				{
+					if (fromString(elementName) == E_UType::Null)
+					{
+						((UValue&)item) = nullptr;
+					}
 					return true;
 				}
 			}

@@ -168,6 +168,10 @@ namespace uio
 		UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
 		std::string elementName = getElementNameOrType(key, E_UType::Array);
 		beginObject(stream, elementName);
+		if (indentLevel == 0)
+		{
+			declareNameSpace(stream, "uio", "urn:uio:schema");
+		}
 		writeNonEmptyAttribute(stream, "key", key);
 		if (!array.isEmpty())
 		{
@@ -196,17 +200,28 @@ namespace uio
 		UIOHelper::doIndent(stream, indent, indentLevel, settings.getIndentValue());
 		std::string elementName = getElementNameOrType(key, value.getType());
 		beginObject(stream, elementName);
-		writeNonEmptyAttribute(stream, "key", key);
-		stream << ">";
-		if (value.isString())
+		if (indentLevel == 0)
 		{
-			stream << getSafeXmlValue(value.getString());
+			declareNameSpace(stream, "uio", "urn:uio:schema");
+		}
+		writeNonEmptyAttribute(stream, "key", key);
+		if (value.isNull())
+		{
+			stream << "/>";
 		}
 		else
 		{
-			stream << value.getString();
+			stream << ">";
+			if (value.isString())
+			{
+				stream << getSafeXmlValue(value.getString());
+			}
+			else
+			{
+				stream << value.getString();
+			}
+			endObject(stream, elementName);
 		}
-		endObject(stream, elementName);
 		UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
 	}
 

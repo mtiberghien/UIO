@@ -202,6 +202,16 @@ namespace UIOTests
 			Assert::IsTrue(v == v2);
 		}
 
+		TEST_METHOD(SerializeArray)
+		{
+			UArray a;
+			std::string json = JsonSerializer::serialize(a, false);
+			Assert::AreEqual(std::string{ "[]" }, json);
+			a << 1 << 2 << 3;
+			json = JsonSerializer::serialize(a, false);
+			Assert::AreEqual(std::string{ "[1, 2, 3]" }, json);
+		}
+
 
 	};
 }
