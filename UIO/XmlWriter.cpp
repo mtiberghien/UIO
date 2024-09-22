@@ -112,52 +112,54 @@ namespace uio
 
 	static void writeObject(std::ostream& stream, const UObject& object, const XmlSettings& settings, int& indentLevel, const std::string& key)
 	{
+		std::ostringstream markupStream;
+		std::ostringstream contentStream;
+		bool hasContent = false;
 		bool indent = settings.getIndent();
 		unsigned short indentValue = settings.getIndentValue();
-		UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
+		UIOHelper::doIndent(markupStream, indent, indentLevel, indentValue);
 		std::string elementName = getElementNameOrType(key.empty() ? object.getClass() : key, E_UType::Object);
-		beginObject(stream,  elementName);
+		beginObject(markupStream,  elementName);
 		int childrenCount = 0;
 		if (indentLevel == 0)
 		{
-			declareNameSpace(stream, "uio", "urn:uio:schema");
+			declareNameSpace(markupStream, "uio", "urn:uio:schema");
 		}
-		writeNonEmptyAttribute(stream, "key", key);
-		writeNonEmptyAttribute(stream, "class", object.getClass());
+		writeNonEmptyAttribute(markupStream, "key", key);
+		writeNonEmptyAttribute(markupStream, "class", object.getClass());
 		if (!object.isEmpty())
 		{
 			for (auto it = object.begin(); it != object.end(); it++)
 			{
 				if (it->second.isPrimitive())
 				{
-					writeAttribute(stream, it->first, it->second);
+					writeAttribute(markupStream, it->first, it->second);
 				}
 				else
 				{
-					childrenCount++;
+					if (!hasContent)
+					{
+						hasContent = true;
+						UIOHelper::handleIndent(markupStream, false, indentLevel, E_IndentMode::Increment);
+					}
+					writeValue(contentStream, it->second, settings, indentLevel, it->first);
 				}
 			}
 		}
-		if (childrenCount>0)
+		if (hasContent)
 		{
-			stream << ">";
-			UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::Increment);
-			for (auto it = object.begin(); it != object.end(); it++)
-			{
-				if (!it->second.isPrimitive())
-				{
-					writeValue(stream, it->second, settings, indentLevel, it->first);
-				}
-			}
-			UIOHelper::handleIndent(stream, false, indentLevel, E_IndentMode::Decrement);
-			UIOHelper::doIndent(stream, indent, indentLevel, indentValue);
-			endObject(stream, elementName);
-			UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
+			markupStream << ">";
+			UIOHelper::handleIndent(markupStream, indent, indentLevel, E_IndentMode::Decrement);
+			UIOHelper::doIndent(contentStream, indent, indentLevel, indentValue);
+			endObject(contentStream, elementName);
+			UIOHelper::handleIndent(contentStream, indent, indentLevel, E_IndentMode::None);
+			stream << markupStream.str() << contentStream.str();
 		}
 		else
 		{
-			stream << "/>";
-			UIOHelper::handleIndent(stream, indent, indentLevel, E_IndentMode::None);
+			markupStream << "/>";
+			UIOHelper::handleIndent(markupStream, indent, indentLevel, E_IndentMode::None);
+			stream << markupStream.str();
 		}
 	}
 

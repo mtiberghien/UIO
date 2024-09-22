@@ -215,9 +215,8 @@ namespace uio
 
 	
 
-	static bool readAttributes(std::istream& stream, UItem& item, bool& hasContent, std::string& key)
+	static bool readAttributes(std::istream& stream, UItem& item, bool& hasContent, UObject& metaData)
 	{
-		bool isArray = false;
 		while (UIOHelper::findFirstNonSpaceCharacter(stream))
 		{
 			if (stream.peek() == '/')
@@ -233,10 +232,6 @@ namespace uio
 			{
 				stream.get();
 				hasContent = true;
-				if (isArray && item.isUndefined())
-				{
-					((UValue&)item) = E_UType::Array;
-				}
 				return true;
 			}
 			std::string prefix{ "" };
@@ -244,37 +239,26 @@ namespace uio
 			std::string value{ "" };
 			if (readAttributeKey(stream, prefix, attributeKey) && readAttributeValue(stream, value))
 			{
-				bool isUIOSchema = UIOHelper::iequals("uio", prefix);
-				bool isUIOClass = isUIOSchema && UIOHelper::iequals("class", attributeKey);
 				bool isAttribute = prefix.empty();
-				bool shouldBeObject = isAttribute || isUIOClass;
-				if (shouldBeObject && item.isUndefined())
+				if (isAttribute)
 				{
-					((UValue&)item) = E_UType::Object;
+					if (item.isUndefined())
+					{
+						((UValue&)item) = E_UType::Object;
 
-				}
-				if (item.isObject())
-				{
-					if (isAttribute)
+					}
+					if (item.isObject())
 					{
 						UIOHelper::setValue(item[attributeKey], value);
 					}
-					if (isUIOClass)
-					{
-						item.getObject().setClass(value);
-					}
 				}
-				if (isUIOSchema)
+				else
 				{
-					if (UIOHelper::iequals("key", attributeKey))
+					if (!metaData.exists(prefix))
 					{
-						key = value;
+						metaData[prefix] = E_UType::Object;
 					}
-					else if (UIOHelper::iequals("type", attributeKey))
-					{
-						isArray = UIOHelper::iequals(toString(E_UType::Array), value);
-					}
-					
+					UIOHelper::setValue(metaData[prefix][attributeKey], value);
 				}
 			}
 		}
@@ -338,21 +322,15 @@ namespace uio
 
 	static bool readMarkupItem(std::istream& stream, UItem& item, std::string& key, E_MarkupType& foundType)
 	{
+		bool result = false;
 		if (getFirstBeginMarkup(stream, foundType))
 		{
 			std::string elementName = getElementName(stream);
 			bool hasContent;
-			if (readAttributes(stream, item, hasContent, key))
+			UObject metaData;
+			if (readAttributes(stream, item, hasContent, metaData))
 			{
-				key = key.empty() ? elementName : key;
-				if(item.isObject())
-				{
-					UObject& o = item.getObject();
-					if (o.getClass().empty() && !UIOHelper::iequals(toString(E_UType::Object), elementName))
-					{
-						o.setClass(UIOHelper::toLower(elementName));
-					}			
-				}
+				key = metaData.find("uio.key").getString(elementName);
 				if (hasContent)
 				{
 					if (UIOHelper::findFirstNonSpaceCharacter(stream))
@@ -361,7 +339,8 @@ namespace uio
 						{
 							if (item.isUndefined())
 							{
-								((UValue&)item) = E_UType::Object;
+								E_UType type = fromString(metaData.find("uio.type").getString(toString(E_UType::Object)));
+								(UValue&)item = type == E_UType::Array ? type : E_UType::Object;
 							}
 							bool hasNext = false;
 							do
@@ -375,28 +354,30 @@ namespace uio
 									{
 										std::string endElementName = getElementName(stream);
 										UIOHelper::readNextCharacter(stream, '>');
-										return elementName == endElementName;
+										result = elementName == endElementName;
 									}
-									return false;
 								}
-								if (item.isObject())
+								else
 								{
-									if (!item.getObject().exists(childKey))
+									if (item.isObject())
 									{
-										item[childKey] = child;
-									}
-									else
-									{
-										if (changeToArray(item))
+										if (!item.getObject().exists(childKey))
 										{
-											item.getArray().push_back(child);
+											item[childKey] = child;
 										}
-										else return false;
+										else
+										{
+											if (changeToArray(item))
+											{
+												item.getArray().push_back(child);
+											}
+											else return false;
+										}
 									}
-								}
-								else if (item.isArray())
-								{
-									item.getArray().push_back(child);
+									else if (item.isArray())
+									{
+										item.getArray().push_back(child);
+									}
 								}
 							} while (hasNext);
 						}
@@ -406,10 +387,9 @@ namespace uio
 							if (item.isUndefined())
 							{
 								UIOHelper::setValue((UValue&)item, value, fromString(elementName));
-								return !getFirstBeginMarkup(stream, foundType) && foundType == E_MarkupType::EndMarkup && getElementName(stream) == elementName && UIOHelper::readNextCharacter(stream, '>');
+								result = !getFirstBeginMarkup(stream, foundType) && foundType == E_MarkupType::EndMarkup && getElementName(stream) == elementName && UIOHelper::readNextCharacter(stream, '>');
 
 							}
-							return false;
 						}
 					}
 					
@@ -420,11 +400,16 @@ namespace uio
 					{
 						((UValue&)item) = nullptr;
 					}
-					return true;
+					result = true;
 				}
 			}
+			if (item.isObject())
+			{
+				std::string defaultClass = UIOHelper::iequals(toString(E_UType::Object), elementName) ? "" : elementName;
+				item.getObject().setClass(metaData.find("uio.class").getString(defaultClass));
+			}
 		}
-		return false;
+		return result;
 	}
 
 	bool XmlReader::readItem(std::istream& stream, UItem& item)
